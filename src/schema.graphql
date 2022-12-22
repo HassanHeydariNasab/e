@@ -1,3 +1,14 @@
 type Query {
   hello: String
+  user(UserInput: UserInput!): User
+}
+
+input UserInput {
+  name: String!
+}
+
+type User {
+  _id: ID!
+  name: String!
+  friends: [User!]!
 }
