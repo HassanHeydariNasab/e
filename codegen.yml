@@ -7,7 +7,7 @@ generates:
       - "typescript-resolvers"
     config:
       useIndexSignature: true
-      # contextType: "../index#MyContext"
+      contextType: "@resolvers/context#Context"
   ./src/__generated__/graphql.schema.json:
     plugins:
       - "introspection"

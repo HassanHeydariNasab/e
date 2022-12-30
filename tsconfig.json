@@ -8,7 +8,7 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,
@@ -22,7 +22,9 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": "./src",
+    "paths": {"@components": ["components"], "@services": ["services"], "@operations": ["operations"], "@styles/*": ["styles/*"], "@db": ["db"], "@types": ["__generated__/types"], "@resolvers/*": ["resolvers/*"]}
   },
   "include": [
     "next-env.d.ts",

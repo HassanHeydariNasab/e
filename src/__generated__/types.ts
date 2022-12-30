@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { Context } from '@resolvers/context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -14,10 +15,45 @@ export type Scalars = {
   Float: number;
 };
 
+export type ConfirmVerificationCodeInput = {
+  phoneNumber: Scalars['String'];
+  verificationCode: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  confirmVerificationCode: Scalars['String'];
+  sendVerificationCode?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationConfirmVerificationCodeArgs = {
+  ConfirmVerificationCodeInput: ConfirmVerificationCodeInput;
+};
+
+
+export type MutationSendVerificationCodeArgs = {
+  SendVerificationCodeInput: SendVerificationCodeInput;
+};
+
+export type Product = {
+  __typename?: 'Product';
+  _id: Scalars['ID'];
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  productGroupId: Scalars['ID'];
+};
+
+export type ProductGroup = {
+  __typename?: 'ProductGroup';
+  _id: Scalars['ID'];
+};
+
 export type Query = {
   __typename?: 'Query';
   hello?: Maybe<Scalars['String']>;
-  user?: Maybe<User>;
+  me: User;
+  user: User;
 };
 
 
@@ -25,15 +61,20 @@ export type QueryUserArgs = {
   UserInput: UserInput;
 };
 
+export type SendVerificationCodeInput = {
+  phoneNumber: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   _id: Scalars['ID'];
-  friends: Array<User>;
-  name: Scalars['String'];
+  balance: Scalars['Float'];
+  name?: Maybe<Scalars['String']>;
+  phoneNumber: Scalars['String'];
 };
 
 export type UserInput = {
-  name: Scalars['String'];
+  _id: Scalars['ID'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -107,8 +148,14 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  ConfirmVerificationCodeInput: ConfirmVerificationCodeInput;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Product: ResolverTypeWrapper<Product>;
+  ProductGroup: ResolverTypeWrapper<ProductGroup>;
   Query: ResolverTypeWrapper<{}>;
+  SendVerificationCodeInput: SendVerificationCodeInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
   UserInput: UserInput;
@@ -117,26 +164,55 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
+  ConfirmVerificationCodeInput: ConfirmVerificationCodeInput;
+  Float: Scalars['Float'];
   ID: Scalars['ID'];
+  Mutation: {};
+  Product: Product;
+  ProductGroup: ProductGroup;
   Query: {};
+  SendVerificationCodeInput: SendVerificationCodeInput;
   String: Scalars['String'];
   User: User;
   UserInput: UserInput;
 }>;
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'UserInput'>>;
+export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  confirmVerificationCode?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationConfirmVerificationCodeArgs, 'ConfirmVerificationCodeInput'>>;
+  sendVerificationCode?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSendVerificationCodeArgs, 'SendVerificationCodeInput'>>;
 }>;
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  friends?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  productGroupId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type Resolvers<ContextType = any> = ResolversObject<{
+export type ProductGroupResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductGroup'] = ResolversParentTypes['ProductGroup']> = ResolversObject<{
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'UserInput'>>;
+}>;
+
+export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  balance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type Resolvers<ContextType = Context> = ResolversObject<{
+  Mutation?: MutationResolvers<ContextType>;
+  Product?: ProductResolvers<ContextType>;
+  ProductGroup?: ProductGroupResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;

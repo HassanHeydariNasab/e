@@ -1,0 +1,19 @@
+@use "../../styles/colors.scss" as c;
+@use "../../styles/variables.scss" as v;
+
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    max-width: 320px;
+    padding: 32px;
+    border: 4px solid c.$dark-primary;
+    border-radius: v.$input-border-radius;
+  }
+}

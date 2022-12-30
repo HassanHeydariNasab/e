@@ -1,14 +1,45 @@
 type Query {
   hello: String
-  user(UserInput: UserInput!): User
+  user(UserInput: UserInput!): User!
+  me: User!
+}
+
+type Mutation {
+  sendVerificationCode(
+    SendVerificationCodeInput: SendVerificationCodeInput!
+  ): Boolean
+  confirmVerificationCode(
+    ConfirmVerificationCodeInput: ConfirmVerificationCodeInput!
+  ): String!
+}
+
+input SendVerificationCodeInput {
+  phoneNumber: String!
+}
+
+input ConfirmVerificationCodeInput {
+  phoneNumber: String!
+  verificationCode: String!
 }
 
 input UserInput {
-  name: String!
+  _id: ID!
 }
 
 type User {
   _id: ID!
+  name: String
+  phoneNumber: String!
+  balance: Float!
+}
+
+type ProductGroup {
+  _id: ID!
+}
+
+type Product {
+  _id: ID!
+  productGroupId: ID!
   name: String!
-  friends: [User!]!
+  price: Float!
 }

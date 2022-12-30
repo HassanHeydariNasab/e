@@ -1,0 +1,22 @@
+@use "../../styles/variables.scss" as v;
+@use "../../styles/colors.scss" as c;
+
+.link {
+  text-decoration: none;
+  border: none;
+  outline: none;
+  border: 2px solid c.$dark-primary;
+  border-radius: v.$input-border-radius;
+  background-color: c.$primary;
+  cursor: pointer;
+  padding: v.$button-padding;
+  color: c.$dark-primary;
+  font-weight: 700;
+  font-size: medium;
+  text-transform: uppercase;
+  transition: filter 200ms ease-out;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+}

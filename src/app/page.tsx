@@ -1,15 +1,12 @@
 "use client";
 
-import React from "react";
 import type { NextPage } from "next";
 import { useQuery } from "@apollo/client";
 
-import { GET_USER } from "../operations/home";
+import { GET_ME } from "@operations";
 
 const Home: NextPage = () => {
-  const { data } = useQuery(GET_USER, {
-    variables: { input: { name: "hsn6" } },
-  });
+  const { data } = useQuery(GET_ME);
 
   return (
     <main>
