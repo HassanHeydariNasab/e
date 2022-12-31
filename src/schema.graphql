@@ -1,3 +1,5 @@
+scalar ObjectId
+
 type Query {
   hello: String
   user(UserInput: UserInput!): User!
@@ -23,23 +25,23 @@ input ConfirmVerificationCodeInput {
 }
 
 input UserInput {
-  _id: ID!
+  _id: ObjectId!
 }
 
 type User {
-  _id: ID!
+  _id: ObjectId!
   name: String
   phoneNumber: String!
   balance: Float!
 }
 
 type ProductGroup {
-  _id: ID!
+  _id: ObjectId!
 }
 
 type Product {
-  _id: ID!
-  productGroupId: ID!
+  _id: ObjectId!
+  productGroupId: ObjectId!
   name: String!
   price: Float!
 }

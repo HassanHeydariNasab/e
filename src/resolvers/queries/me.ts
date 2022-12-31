@@ -8,7 +8,7 @@ export const me: QueryResolvers["me"] = async (_, __, { userId }) => {
     throw new GraphQLError("");
   }
   const user: User | null = await db
-    .collection<Omit<User, "_id">>("users")
+    .collection<User>("users")
     .findOne({ _id: userId });
   if (user === null) {
     throw new GraphQLError("User not found!");

@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { Context } from '@resolvers/context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  ObjectId: any;
 };
 
 export type ConfirmVerificationCodeInput = {
@@ -38,15 +39,15 @@ export type MutationSendVerificationCodeArgs = {
 
 export type Product = {
   __typename?: 'Product';
-  _id: Scalars['ID'];
+  _id: Scalars['ObjectId'];
   name: Scalars['String'];
   price: Scalars['Float'];
-  productGroupId: Scalars['ID'];
+  productGroupId: Scalars['ObjectId'];
 };
 
 export type ProductGroup = {
   __typename?: 'ProductGroup';
-  _id: Scalars['ID'];
+  _id: Scalars['ObjectId'];
 };
 
 export type Query = {
@@ -67,14 +68,14 @@ export type SendVerificationCodeInput = {
 
 export type User = {
   __typename?: 'User';
-  _id: Scalars['ID'];
+  _id: Scalars['ObjectId'];
   balance: Scalars['Float'];
   name?: Maybe<Scalars['String']>;
   phoneNumber: Scalars['String'];
 };
 
 export type UserInput = {
-  _id: Scalars['ID'];
+  _id: Scalars['ObjectId'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -150,8 +151,8 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ConfirmVerificationCodeInput: ConfirmVerificationCodeInput;
   Float: ResolverTypeWrapper<Scalars['Float']>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
+  ObjectId: ResolverTypeWrapper<Scalars['ObjectId']>;
   Product: ResolverTypeWrapper<Product>;
   ProductGroup: ResolverTypeWrapper<ProductGroup>;
   Query: ResolverTypeWrapper<{}>;
@@ -166,8 +167,8 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   ConfirmVerificationCodeInput: ConfirmVerificationCodeInput;
   Float: Scalars['Float'];
-  ID: Scalars['ID'];
   Mutation: {};
+  ObjectId: Scalars['ObjectId'];
   Product: Product;
   ProductGroup: ProductGroup;
   Query: {};
@@ -182,16 +183,20 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   sendVerificationCode?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSendVerificationCodeArgs, 'SendVerificationCodeInput'>>;
 }>;
 
+export interface ObjectIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['ObjectId'], any> {
+  name: 'ObjectId';
+}
+
 export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  productGroupId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  productGroupId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ProductGroupResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductGroup'] = ResolversParentTypes['ProductGroup']> = ResolversObject<{
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -202,7 +207,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 }>;
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   balance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   phoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -211,6 +216,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
+  ObjectId?: GraphQLScalarType;
   Product?: ProductResolvers<ContextType>;
   ProductGroup?: ProductGroupResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
