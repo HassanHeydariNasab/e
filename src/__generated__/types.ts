@@ -78,6 +78,13 @@ export type UserInput = {
   _id: Scalars['ObjectId'];
 };
 
+export type VerificationCode = {
+  __typename?: 'VerificationCode';
+  _id: Scalars['ObjectId'];
+  phoneNumber: Scalars['String'];
+  verificationCode: Scalars['String'];
+};
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -160,6 +167,7 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
   UserInput: UserInput;
+  VerificationCode: ResolverTypeWrapper<VerificationCode>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -176,6 +184,7 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars['String'];
   User: User;
   UserInput: UserInput;
+  VerificationCode: VerificationCode;
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -214,6 +223,13 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type VerificationCodeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['VerificationCode'] = ResolversParentTypes['VerificationCode']> = ResolversObject<{
+  _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  phoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  verificationCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = Context> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   ObjectId?: GraphQLScalarType;
@@ -221,5 +237,6 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   ProductGroup?: ProductGroupResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  VerificationCode?: VerificationCodeResolvers<ContextType>;
 }>;
 

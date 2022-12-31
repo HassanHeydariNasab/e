@@ -35,6 +35,12 @@ type User {
   balance: Float!
 }
 
+type VerificationCode {
+  _id: ObjectId!
+  phoneNumber: String!
+  verificationCode: String!
+}
+
 type ProductGroup {
   _id: ObjectId!
 }

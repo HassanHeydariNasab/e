@@ -24,7 +24,7 @@
       }
     ],
     "baseUrl": "./src",
-    "paths": {"@components": ["components"], "@services": ["services"], "@operations": ["operations"], "@styles/*": ["styles/*"], "@db": ["db"], "@types": ["__generated__/types"], "@resolvers/*": ["resolvers/*"]}
+    "paths": {"@components": ["components"], "@services": ["services"], "@operations": ["operations"], "@styles/*": ["styles/*"], "@db": ["db"], "@types": ["__generated__/types"], "@resolvers/*": ["resolvers/*"], "@models": ["models"]}
   },
   "include": [
     "next-env.d.ts",

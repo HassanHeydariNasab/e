@@ -11,7 +11,7 @@ const Home: NextPage = () => {
   return (
     <main>
       <h1>Home</h1>
-      <div>Hi {data?.user?.name}!</div>
+      <div>Hi {data?.me?.phoneNumber}!</div>
     </main>
   );
 };

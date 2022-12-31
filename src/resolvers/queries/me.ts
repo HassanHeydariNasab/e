@@ -1,15 +1,15 @@
 import { GraphQLError } from "graphql";
 
-import { db } from "@db";
-import type { QueryResolvers, User } from "@types";
+import type { QueryResolvers } from "@types";
+import { UsersCollection } from "@models";
 
 export const me: QueryResolvers["me"] = async (_, __, { userId }) => {
   if (!userId) {
-    throw new GraphQLError("");
+    throw new GraphQLError("Please login.", {
+      extensions: { http: { status: 401 } },
+    });
   }
-  const user: User | null = await db
-    .collection<User>("users")
-    .findOne({ _id: userId });
+  const user = await UsersCollection.findOne({ _id: userId });
   if (user === null) {
     throw new GraphQLError("User not found!");
   }

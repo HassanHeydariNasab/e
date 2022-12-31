@@ -12,7 +12,9 @@ function Navbar() {
         </MyLink>
       </div>
       <div className={styles["right"]}>
-        <MyLink href="/sendVerificationCode?reason=login">Login</MyLink>
+        <MyLink href="/sendVerificationCode?reason=login" variant="outlined">
+          Login
+        </MyLink>
       </div>
     </nav>
   );
