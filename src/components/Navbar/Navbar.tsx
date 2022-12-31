@@ -1,9 +1,14 @@
-import { MyLink } from "@components";
-import { merienda } from "@styles/fonts";
+"use client";
 
+import { merienda } from "@styles/fonts";
+import { MyLink } from "@components";
+
+import { useNavbar } from "./hooks";
 import styles from "./styles.module.scss";
 
 function Navbar() {
+  const { isLoggedIn, user } = useNavbar();
+
   return (
     <nav className={styles["nav"]}>
       <div className={styles["left"]}>
@@ -12,9 +17,15 @@ function Navbar() {
         </MyLink>
       </div>
       <div className={styles["right"]}>
-        <MyLink href="/sendVerificationCode?reason=login" variant="outlined">
-          Login
-        </MyLink>
+        {isLoggedIn ? (
+          <MyLink href="/profile" variant="outlined">
+            {user?.name || user?.phoneNumber || "Hello"}
+          </MyLink>
+        ) : (
+          <MyLink href="/sendVerificationCode?reason=login" variant="outlined">
+            Login
+          </MyLink>
+        )}
       </div>
     </nav>
   );

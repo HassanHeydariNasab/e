@@ -1,0 +1,20 @@
+@use "../../styles/colors.scss" as c;
+
+.container {
+  aspect-ratio: 3/4;
+  border-radius: 32px;
+  background-color: c.$primary;
+  color: c.$dark-primary;
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 96px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: box-shadow 200ms ease-out;
+
+  &:hover {
+    box-shadow: 0px 0px 32px -4px c.$primary;
+  }
+}

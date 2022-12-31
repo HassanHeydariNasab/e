@@ -1,17 +1,20 @@
 "use client";
 
+import { AddProductCard, ProductCard } from "@components";
 import type { NextPage } from "next";
-import { useQuery } from "@apollo/client";
 
-import { GET_ME } from "@operations";
+import styles from "./styles.module.scss";
 
 const Home: NextPage = () => {
-  const { data } = useQuery(GET_ME);
-
   return (
     <main>
-      <h1>Home</h1>
-      <div>Hi {data?.me?.phoneNumber}!</div>
+      <div className={styles["products"]}>
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <AddProductCard />
+      </div>
     </main>
   );
 };

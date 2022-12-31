@@ -15,3 +15,14 @@
     flex-direction: column;
   }
 }
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 32px;
+  & > * {
+    flex: 250px 1 1;
+    max-width: 500px;
+  }
+}

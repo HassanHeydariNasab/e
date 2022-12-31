@@ -7,16 +7,20 @@ import {
   from,
   HttpLink,
   InMemoryCache,
+  makeVar,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { Toaster } from "react-hot-toast";
 
-let token: string | null;
+export const tokenVar = makeVar<string | null>(localStorage.getItem("token"));
 
 const setAuthorizationLink = setContext((operation, prevContext) => {
-  if (token) return token;
-  token = localStorage.getItem("token");
-  return { headers: { authorization: token } };
+  if (tokenVar()) {
+    return { headers: { authorization: tokenVar() } };
+  }
+  const savedToken = localStorage.getItem("token");
+  tokenVar(savedToken);
+  return { headers: { authorization: savedToken } };
 });
 
 const httpLink = new HttpLink({

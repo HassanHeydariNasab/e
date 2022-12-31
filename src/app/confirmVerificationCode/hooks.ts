@@ -7,6 +7,7 @@ import { CONFIRM_VERIFICATION_CODE } from "@operations";
 import type { MutationConfirmVerificationCodeArgs } from "@types";
 
 import type { FormSchema } from "./consts";
+import { tokenVar } from "app/ContextProviders";
 
 interface Props {
   phoneNumber: string;
@@ -22,6 +23,7 @@ export const useConfirmVerificationCode = ({ phoneNumber }: Props) => {
     onCompleted(data) {
       const token = data.confirmVerificationCode;
       localStorage.setItem("token", token);
+      tokenVar(token);
       toast.success("Welcome!");
       router.replace("/");
     },
