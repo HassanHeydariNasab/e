@@ -4,6 +4,7 @@ import type { QueryResolvers } from "@types";
 import { UsersCollection } from "@models";
 
 export const me: QueryResolvers["me"] = async (_, __, { userId }) => {
+  console.log({ userId });
   if (!userId) {
     throw new GraphQLError("Please login.", {
       extensions: { http: { status: 401 } },
@@ -11,7 +12,9 @@ export const me: QueryResolvers["me"] = async (_, __, { userId }) => {
   }
   const user = await UsersCollection.findOne({ _id: userId });
   if (user === null) {
-    throw new GraphQLError("User not found!");
+    throw new GraphQLError("User not found!", {
+      extensions: { http: { status: 401 } },
+    });
   }
   return user;
 };

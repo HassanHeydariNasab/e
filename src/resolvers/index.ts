@@ -1,11 +1,17 @@
 import type { Resolvers } from "@types";
 
 import { GraphQLObjectId } from "./scalars/ObjectId";
-import { sendVerificationCode, confirmVerificationCode } from "./mutations";
+import { GraphQLDate } from "./scalars/Date";
+import {
+  sendVerificationCode,
+  confirmVerificationCode,
+  createCategory,
+} from "./mutations";
 import { me } from "./queries";
 
 export const resolvers: Resolvers = {
   ObjectId: GraphQLObjectId,
+  Date: GraphQLDate,
   Query: {
     hello: () => "world",
     me,
@@ -13,5 +19,6 @@ export const resolvers: Resolvers = {
   Mutation: {
     sendVerificationCode,
     confirmVerificationCode,
+    createCategory,
   },
 };

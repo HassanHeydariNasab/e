@@ -3,8 +3,16 @@ import type { NextApiHandler } from "next";
 import { decode, verify } from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 
+import { Permission } from "@types";
+
 export interface Context {
   userId: ObjectId | null;
+  permissions?: Permission[];
+}
+
+export interface TokenPayload {
+  id: string;
+  p?: Permission[];
 }
 
 export const context: ContextFunction<
@@ -14,13 +22,13 @@ export const context: ContextFunction<
   const context: Context = { userId: null };
   const token = req.headers.authorization;
   if (token) {
-    if (verify(token, process.env.JWT_SECRET || "")) {
-      try {
-        const objectId = decode(token) as string;
-        const userId = new ObjectId(objectId);
-        context.userId = userId;
-      } catch (error) {}
-    }
+    try {
+      verify(token, process.env.JWT_SECRET || "");
+      const tokenPayload: TokenPayload = decode(token) as TokenPayload;
+      const userId = new ObjectId(tokenPayload.id);
+      context.userId = userId;
+      context.permissions = tokenPayload.p;
+    } catch (error) {}
   }
   return context;
 };

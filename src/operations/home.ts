@@ -7,6 +7,7 @@ export const GET_ME = gql`
       name
       balance
       phoneNumber
+      permissions
     }
   }
 `;

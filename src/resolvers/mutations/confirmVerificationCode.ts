@@ -1,9 +1,12 @@
-import { ObjectID } from "bson";
 import { GraphQLError } from "graphql";
+import { ObjectId } from "mongodb";
 import { sign } from "jsonwebtoken";
 
 import { db } from "@db";
-import type { MutationResolvers } from "@types";
+import { Permission } from "@types";
+import type { MutationResolvers, User } from "@types";
+import { UsersCollection } from "@models";
+import type { TokenPayload } from "@resolvers/context";
 
 export const confirmVerificationCode: MutationResolvers["confirmVerificationCode"] =
   async (
@@ -17,16 +20,32 @@ export const confirmVerificationCode: MutationResolvers["confirmVerificationCode
       throw new GraphQLError("The verification code is invalid");
     }
 
-    const user = await db.collection("users").findOne({ phoneNumber });
-    let userId: ObjectID;
+    const user = await UsersCollection.findOne({ phoneNumber });
+    let userId: ObjectId;
+    let permissions: Permission[] | undefined;
     if (user === null) {
-      const { insertedId } = await db
-        .collection("users")
-        .insertOne({ phoneNumber });
+      const usersCount = await UsersCollection.countDocuments();
+      const newUser: Omit<User, "_id"> = {
+        phoneNumber,
+        balance: 0,
+      };
+      if (usersCount === 0) {
+        newUser.permissions = [Permission.Admin];
+        permissions = [Permission.Admin];
+      }
+      const { insertedId } = await UsersCollection.insertOne(newUser);
       userId = insertedId;
     } else {
-      userId = user?._id;
+      userId = user._id;
+      permissions = user.permissions || undefined;
     }
-    const token = sign(userId.toHexString(), process.env.JWT_SECRET || "");
+
+    const tokenPayload: TokenPayload = {
+      id: userId.toHexString(),
+    };
+    if (permissions) {
+      tokenPayload.p = permissions;
+    }
+    const token = sign(tokenPayload, process.env.JWT_SECRET || "");
     return token;
   };

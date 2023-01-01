@@ -1,9 +1,12 @@
 scalar ObjectId
+scalar Date
+scalar File
 
 type Query {
   hello: String
   user(UserInput: UserInput!): User!
   me: User!
+  categories: [Category]
 }
 
 type Mutation {
@@ -13,6 +16,7 @@ type Mutation {
   confirmVerificationCode(
     ConfirmVerificationCodeInput: ConfirmVerificationCodeInput!
   ): String!
+  createCategory(input: CreateCategoryInput!): Category!
 }
 
 input SendVerificationCodeInput {
@@ -28,17 +32,35 @@ input UserInput {
   _id: ObjectId!
 }
 
+input CreateCategoryInput {
+  name: String!
+  parentId: ObjectId
+}
+
+enum Permission {
+  ADMIN
+  PRODUCT
+  ACCOUNTING
+}
+
 type User {
   _id: ObjectId!
   name: String
   phoneNumber: String!
   balance: Float!
+  permissions: [Permission!]
 }
 
 type VerificationCode {
   _id: ObjectId!
   phoneNumber: String!
   verificationCode: String!
+}
+
+type Category {
+  _id: ObjectId!
+  name: String!
+  parentId: ObjectId
 }
 
 type ProductGroup {
@@ -50,4 +72,12 @@ type Product {
   productGroupId: ObjectId!
   name: String!
   price: Float!
+  images: [Image]
+  defaultImage: Image
+  createdAt: Date
+}
+
+type Image {
+  _id: ObjectId!
+  path: String!
 }
