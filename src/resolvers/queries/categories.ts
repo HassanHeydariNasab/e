@@ -11,6 +11,8 @@ export const categories: QueryResolvers["categories"] = async (
   if (!permissions || !permissions.includes(Permission.Admin)) {
     filter = { isHidden: { $exists: false } };
   }
-  const categories = await CategoriesCollection.find(filter).toArray();
+  const categories = await CategoriesCollection.find(filter, {
+    sort: { name: 1 },
+  }).toArray();
   return categories;
 };

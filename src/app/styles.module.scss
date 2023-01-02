@@ -30,22 +30,20 @@
 
 .categories {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
-  overflow-x: auto;
-  padding: 32px 0px;
+  padding: 32px;
   & > * {
-    flex: 150px 0 0;
+    flex: 150px 1 1;
     max-width: 300px;
     &:first-child {
       margin-left: 32px;
-    }
-    &:last-child {
-      margin-right: 32px;
     }
   }
   &__current-category {
     display: flex;
     align-items: center;
+    margin: 0 16px;
     color: c.$primary;
     &__name {
       font-size: xx-large;

@@ -55,9 +55,11 @@ const Home: NextPage = () => {
             </span>
           </div>
         )}
-        {subcategories.map((subcategory) => (
-          <CategoryCard category={subcategory} key={subcategory._id} />
-        ))}
+        {subcategories
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((subcategory) => (
+            <CategoryCard category={subcategory} key={subcategory._id} />
+          ))}
         {permissions?.includes(Permission.Admin) && (
           <AddCategoryCard
             parentId={searchParams.get("categoryId") || undefined}

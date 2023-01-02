@@ -49,6 +49,7 @@ const ContextProviders: FC<PropsWithChildren> = ({ children }) => {
   const apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
     link: from([errorLink, setAuthorizationLink, httpLink]),
+    connectToDevTools: true,
   });
   return (
     <ApolloProvider client={apolloClient}>

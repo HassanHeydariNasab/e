@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import type { SubmitHandler } from "react-hook-form";
 
 import { Category, MutationCreateCategoryArgs } from "@types";
@@ -17,7 +17,37 @@ export const useCreateCategory = ({ parentId }: Props) => {
   const [createCategory, { loading: isSubmitting }] = useMutation<
     { createCategory: Category },
     MutationCreateCategoryArgs
-  >(CREATE_CATEGROY);
+  >(CREATE_CATEGROY, {
+    update(cache, result) {
+      cache.modify({
+        fields: {
+          categories(existingCategories = []) {
+            const newCategoryRef = cache.writeFragment({
+              data: result.data?.createCategory,
+              fragment: gql`
+                fragment newCategory on Category {
+                  _id
+                  name
+                  parentId
+                }
+              `,
+            });
+            return [...existingCategories, newCategoryRef];
+          },
+        },
+      });
+    },
+    onQueryUpdated(observableQuery) {
+      observableQuery.refetch();
+      /*
+        FIXME our optimistic update is not useful if we send
+        another request for getting page (router.replace/push).
+        but going back is not a general case
+      */
+      router.back();
+      return false;
+    },
+  });
 
   const { data: categoriesData, loading: isLoadingCategories } = useQuery<{
     categories: Category[];
@@ -29,11 +59,6 @@ export const useCreateCategory = ({ parentId }: Props) => {
       variables: {
         input: { name, parentId },
       },
-    }).then((result) => {
-      if (result.data?.createCategory) {
-        const category = result.data.createCategory;
-        router.replace(`/?categoryId=${encodeURIComponent(category._id)}`);
-      }
     });
   };
 
