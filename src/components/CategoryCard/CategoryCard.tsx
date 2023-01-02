@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import Link from "next/link";
 
 import type { Category } from "@types";
 
@@ -9,7 +10,11 @@ interface Props {
 }
 
 const CategoryCard: FC<Props> = ({ category }) => {
-  return <div className={styles["container"]}>Category</div>;
+  return (
+    <Link href={`/?categoryId=${category?._id}`}>
+      <div className={styles["container"]}>{category?.name}</div>
+    </Link>
+  );
 };
 
 export default CategoryCard;

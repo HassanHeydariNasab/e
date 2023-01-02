@@ -19,6 +19,7 @@ export const createCategory: MutationResolvers["createCategory"] = async (
     throw new GraphQLError("Category with this name already exists.");
   }
   if (
+    parentId &&
     (await CategoriesCollection.countDocuments({
       _id: new ObjectId(parentId),
     })) !== 1

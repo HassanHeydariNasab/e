@@ -1,5 +1,7 @@
 "use client";
 
+import { IoLogIn, IoPerson } from "react-icons/io5";
+
 import { merienda } from "@styles/fonts";
 import { MyLink } from "@components";
 
@@ -19,10 +21,12 @@ function Navbar() {
       <div className={styles["right"]}>
         {isLoggedIn ? (
           <MyLink href="/profile" variant="outlined">
+            <IoPerson size={"1rem"} />
             {user?.name || user?.phoneNumber || "Hello"}
           </MyLink>
         ) : (
           <MyLink href="/sendVerificationCode?reason=login" variant="outlined">
+            <IoLogIn />
             Login
           </MyLink>
         )}

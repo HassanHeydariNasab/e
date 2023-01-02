@@ -1,3 +1,5 @@
+@use "../styles/colors.scss" as c;
+
 .html {
   background-color: black;
   color: white;
@@ -14,6 +16,16 @@
     display: flex;
     flex-direction: column;
   }
+
+  & a {
+    text-decoration: none;
+    cursor: pointer;
+    transition: filter 200ms ease-out;
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+  }
 }
 
 .categories {
@@ -29,6 +41,16 @@
     }
     &:last-child {
       margin-right: 32px;
+    }
+  }
+  &__current-category {
+    display: flex;
+    align-items: center;
+    color: c.$primary;
+    &__name {
+      font-size: xx-large;
+      font-weight: 700;
+      cursor: default;
     }
   }
 }

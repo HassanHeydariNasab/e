@@ -2,6 +2,9 @@
 @use "../../styles/colors.scss" as c;
 
 .link {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   text-decoration: none;
   border: none;
   outline: none;

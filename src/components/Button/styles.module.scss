@@ -2,6 +2,10 @@
 @use "../../styles/colors.scss" as c;
 
 .button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
   border: none;
   outline: none;
   border: 2px solid c.$dark-primary;
@@ -18,6 +22,27 @@
   &:hover {
     filter: brightness(1.1);
   }
+}
+
+.transparent {
+  color: c.$primary;
+}
+
+.filled {
+  border: 2px solid c.$dark-primary;
+  background-color: c.$primary;
+  color: c.$dark-primary;
+}
+
+.outlined {
+  border: 2px solid c.$primary;
+  color: c.$primary;
+}
+
+.secondary {
+  border: 2px solid c.$dark-secondary;
+  background-color: c.$secondary;
+  color: c.$dark-secondary;
 }
 
 @keyframes loading {

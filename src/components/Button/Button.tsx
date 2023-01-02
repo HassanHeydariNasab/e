@@ -14,16 +14,22 @@ interface Props
     HTMLButtonElement
   > {
   isLoading?: boolean;
+  variant?: "filled" | "outlined" | "secondary" | "transparent";
 }
 
 const Button: FC<PropsWithChildren<Props>> = ({
   children,
   isLoading,
+  variant = "filled",
   ...rest
 }) => {
   return (
     <button
-      className={clsx(styles["button"], isLoading && styles["button--loading"])}
+      className={clsx(
+        styles["button"],
+        styles[variant],
+        isLoading && styles["button--loading"]
+      )}
       disabled={isLoading}
       {...rest}
     >

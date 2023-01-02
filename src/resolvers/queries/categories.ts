@@ -8,8 +8,8 @@ export const categories: QueryResolvers["categories"] = async (
   { permissions }
 ) => {
   let filter = {};
-  if (permissions?.includes(Permission.Admin)) {
-    filter = { isHidden: true };
+  if (!permissions || !permissions.includes(Permission.Admin)) {
+    filter = { isHidden: { $exists: false } };
   }
   const categories = await CategoriesCollection.find(filter).toArray();
   return categories;

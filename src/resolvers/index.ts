@@ -7,7 +7,7 @@ import {
   confirmVerificationCode,
   createCategory,
 } from "./mutations";
-import { me } from "./queries";
+import { me, categories } from "./queries";
 
 export const resolvers: Resolvers = {
   ObjectId: GraphQLObjectId,
@@ -15,6 +15,7 @@ export const resolvers: Resolvers = {
   Query: {
     hello: () => "world",
     me,
+    categories,
   },
   Mutation: {
     sendVerificationCode,

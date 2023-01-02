@@ -12,7 +12,7 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
-import { Toaster } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 
 //export const tokenVar = makeVar<string | null>(localStorage.getItem("token"));
 export const tokenVar = makeVar<string | null>(null);
@@ -36,6 +36,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
   if (graphQLErrors) {
     // TODO global error handler (showing a toast, etc)
     // console.log({ graphQLErrors });
+    toast.error(graphQLErrors[0].message);
   }
   if (networkError) {
     if ((networkError as ServerParseError)?.statusCode === 401) {

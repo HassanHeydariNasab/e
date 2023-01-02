@@ -7,7 +7,7 @@ import { tokenVar } from "app/ContextProviders";
 export const useNavbar = () => {
   const token = useReactiveVar(tokenVar);
 
-  const { data } = useQuery<{ me: User }>(GET_ME);
+  const { data } = useQuery<{ me: User }>(GET_ME, { skip: token === null });
 
   return { isLoggedIn: token !== null, user: data?.me };
 };
