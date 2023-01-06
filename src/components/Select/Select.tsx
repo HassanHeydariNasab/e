@@ -1,19 +1,10 @@
 "use client";
 
-import {
-  ChangeEvent,
-  forwardRef,
-  InputHTMLAttributes,
-  LegacyRef,
-  MutableRefObject,
-  RefAttributes,
-  RefObject,
-  useImperativeHandle,
-  useRef,
-} from "react";
+import { forwardRef, useImperativeHandle, useState, useRef } from "react";
 import type {
+  InputHTMLAttributes,
   DetailedHTMLProps,
-  HTMLAttributes,
+  FocusEventHandler,
   MouseEventHandler,
 } from "react";
 import type { ChangeHandler } from "react-hook-form";
@@ -34,11 +25,14 @@ interface Props
   options: Option[];
   error?: string;
   onChange: ChangeHandler;
+  onBlur: ChangeHandler;
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
-  ({ label, error, options, onChange, ...rest }, ref) => {
+  ({ label, error, options, onChange, onBlur, ...rest }, ref) => {
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const [isOptionsVisible, setIsOptionsVisible] = useState<boolean>(false); // TODO: remove me and use ul ref!
 
     useImperativeHandle(
       ref,
@@ -51,12 +45,13 @@ const Input = forwardRef<HTMLInputElement, Props>(
             inputRef.current?.select();
           },
           set value(value: string) {
-            console.log("SET", value);
-            if (inputRef.current) inputRef.current.value = value;
+            if (inputRef.current) {
+              inputRef.current.value =
+                options.find((option) => option.value === value)?.label || "";
+            }
           },
           get value() {
             const value = inputRef.current?.value;
-            console.log("GET", value);
             if (value) {
               return value;
             }
@@ -69,37 +64,77 @@ const Input = forwardRef<HTMLInputElement, Props>(
     );
 
     const onClickOption: MouseEventHandler<HTMLLIElement> = (event) => {
-      const value = event.currentTarget.dataset.value;
-      if (value && inputRef?.current) {
+      const label = event.currentTarget.dataset.label;
+      if (label && inputRef?.current) {
+        inputRef.current.value = label;
+        const value = options.find((option) => option.label === label)?.value;
+        if (!onChange) return;
+        onChange({
+          target: {
+            name: rest.name || "",
+            value,
+          },
+          type: "change",
+        });
+      }
+      setIsOptionsVisible(false);
+    };
+
+    const onClickInput: MouseEventHandler = () => {
+      setIsOptionsVisible((isOptionsVisible) => !isOptionsVisible);
+    };
+
+    const onBlurInput: FocusEventHandler<HTMLInputElement> = (event) => {
+      onBlur({ target: { name: rest.name || "" }, type: "blur" });
+      //setIsOptionsVisible(false);
+    };
+
+    /*
+    const onKeyUpInput: KeyboardEventHandler<HTMLInputElement> = (event) => {
+      const key = event.key;
+      console.log({ key });
+      setIsOptionsVisible((isOptionsVisible) => !isOptionsVisible);
+      if (inputRef.current) {
+        let value = inputRef.current.value.trim();
+        const labels = options.map((option) => option.label);
+        for (let label of labels) {
+          console.log({ label });
+          if (label.startsWith(value)) {
+            value = label;
+          }
+        }
         inputRef.current.value = value;
         if (!onChange) return;
         onChange({
           target: {
             name: rest.name || "",
-            value: value,
+            value,
           },
           type: "change",
         });
       }
     };
+    */
 
     return (
       <div className={styles["container"]}>
         <label htmlFor={rest.name}>{label}</label>
-        <div className={styles["input-container"]}>
-          <input ref={inputRef} {...rest} disabled />
-          <ul>
-            {options.map((option) => (
+        <div className={styles["input-container"]} onClick={onClickInput}>
+          <input ref={inputRef} {...rest} onBlur={onBlurInput} disabled />
+        </div>
+        {isOptionsVisible && (
+          <ul className={styles["options"]}>
+            {options.map((option, index) => (
               <li
                 onClick={onClickOption}
-                data-value={option.value}
+                data-label={option.label}
                 key={option.value}
               >
                 {option.label}
               </li>
             ))}
           </ul>
-        </div>
+        )}
         {error && <div className={styles["error"]}>{error}</div>}
       </div>
     );

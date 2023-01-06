@@ -34,6 +34,24 @@
   }
 }
 
+.options {
+  border-top: 1px solid c.$transparent-dark-secondary;
+  margin: 0;
+  padding: 0;
+  font-size: medium;
+  & li {
+    padding: 8px 16px;
+    color: c.$dark-secondary;
+    cursor: pointer;
+    list-style: none;
+    transition: all 150ms ease-out;
+    &:hover {
+      background-color: c.$dark-secondary;
+      color: c.$secondary;
+    }
+  }
+}
+
 .error {
   border-top: 1px solid c.$transparent-dark-secondary;
   padding: 8px;
