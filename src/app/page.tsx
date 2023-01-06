@@ -61,9 +61,7 @@ const Home: NextPage = () => {
             <CategoryCard category={subcategory} key={subcategory._id} />
           ))}
         {permissions?.includes(Permission.Admin) && (
-          <AddCategoryCard
-            parentId={searchParams.get("categoryId") || undefined}
-          />
+          <AddCategoryCard parentId={categoryId} />
         )}
       </div>
       <div className={styles["products"]}>
@@ -72,7 +70,9 @@ const Home: NextPage = () => {
         <ProductCard />
         <ProductCard />
         {(permissions?.includes(Permission.Admin) ||
-          permissions?.includes(Permission.Product)) && <AddProductCard />}
+          permissions?.includes(Permission.Product)) && (
+          <AddProductCard categoryId={categoryId} />
+        )}
       </div>
     </main>
   );

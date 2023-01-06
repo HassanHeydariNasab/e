@@ -1,0 +1,42 @@
+@use "../../styles/colors.scss" as c;
+@use "../../styles/variables.scss" as v;
+
+.container {
+  background-color: c.$secondary;
+  border: 2px solid c.$transparent-dark-secondary;
+  border-radius: v.$input-border-radius;
+
+  label {
+    display: block;
+    padding: 8px;
+    border-bottom: 1px solid c.$transparent-dark-secondary;
+    border-top-left-radius: v.$input-border-radius;
+    border-top-right-radius: v.$input-border-radius;
+    color: c.$dark-secondary;
+    font-size: small;
+    font-weight: 700;
+  }
+}
+
+.input-container {
+  input {
+    background: unset;
+    border: unset;
+    border-bottom-left-radius: v.$input-border-radius;
+    border-bottom-right-radius: v.$input-border-radius;
+    padding: v.$input-padding;
+    width: 100%;
+    font-size: medium;
+    color: c.$dark-secondary;
+    font-weight: 700;
+    outline-color: c.$primary;
+    cursor: pointer;
+  }
+}
+
+.error {
+  border-top: 1px solid c.$transparent-dark-secondary;
+  padding: 8px;
+  font-size: small;
+  color: c.$dark-secondary;
+}

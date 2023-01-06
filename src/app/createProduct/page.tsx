@@ -6,21 +6,22 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IoArrowBack } from "react-icons/io5";
 
-import { Button, Input, Select } from "@components";
+import { Button, Input } from "@components";
 
 import { formSchema } from "./consts";
 import type { FormSchema } from "./consts";
-import { useCreateCategory } from "./hooks";
+import { useCreateProduct } from "./hooks";
 import styles from "./styles.module.scss";
-import { AttributeType } from "@types";
 
-function CreateCategoryPage() {
+function CreateProductPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const categoryId = searchParams.get("categoryId");
+
   const { parentName, isLoadingCategories, isSubmitting, onSubmit } =
-    useCreateCategory({
-      parentId: searchParams.get("parentId") || undefined,
+    useCreateProduct({
+      parentId: categoryId,
     });
 
   const {
@@ -31,11 +32,7 @@ function CreateCategoryPage() {
 
   return (
     <main className={styles["main"]}>
-      <form
-        onSubmit={handleSubmit(onSubmit, (e) => {
-          console.log({ e });
-        })}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         {!isLoadingCategories && (
           <span className={styles["title"]}>
             {parentName
@@ -49,27 +46,6 @@ function CreateCategoryPage() {
           error={errors?.name?.message}
           label="Category Name"
         />
-        <Input
-          {...register("attributeKeys.0.name")}
-          type="text"
-          error={errors?.attributeKeys?.message}
-          label="Attribute Name"
-        />
-        <Select
-          {...register("attributeKeys.0.type")}
-          options={[
-            {
-              label: AttributeType.String.toLowerCase(),
-              value: AttributeType.String,
-            },
-            {
-              label: AttributeType.Number.toLowerCase(),
-              value: AttributeType.Number,
-            },
-          ]}
-          error={errors?.attributeKeys?.message}
-          label="Attribute Type"
-        />
         <Button isLoading={isSubmitting}>Create</Button>
         <Button type="button" onClick={router.back} variant="secondary">
           <IoArrowBack />
@@ -80,4 +56,4 @@ function CreateCategoryPage() {
   );
 }
 
-export default CreateCategoryPage;
+export default CreateProductPage;

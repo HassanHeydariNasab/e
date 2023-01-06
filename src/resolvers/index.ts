@@ -6,6 +6,7 @@ import {
   sendVerificationCode,
   confirmVerificationCode,
   createCategory,
+  createProductGroup,
 } from "./mutations";
 import { me, categories } from "./queries";
 
@@ -21,5 +22,6 @@ export const resolvers: Resolvers = {
     sendVerificationCode,
     confirmVerificationCode,
     createCategory,
+    createProductGroup,
   },
 };

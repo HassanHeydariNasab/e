@@ -14,13 +14,40 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
-  File: any;
   ObjectId: any;
+};
+
+export type AttributeKey = {
+  __typename?: 'AttributeKey';
+  name: Scalars['String'];
+  type: AttributeType;
+};
+
+export type AttributeKeyInput = {
+  name: Scalars['String'];
+  type: AttributeType;
+};
+
+export enum AttributeType {
+  Number = 'NUMBER',
+  String = 'STRING'
+}
+
+export type AttributeValue = {
+  __typename?: 'AttributeValue';
+  name: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type AttributeValueInput = {
+  name: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type Category = {
   __typename?: 'Category';
   _id: Scalars['ObjectId'];
+  attributeKeys?: Maybe<Array<AttributeKey>>;
   name: Scalars['String'];
   parentId?: Maybe<Scalars['ObjectId']>;
 };
@@ -31,20 +58,37 @@ export type ConfirmVerificationCodeInput = {
 };
 
 export type CreateCategoryInput = {
+  attributeKeys?: InputMaybe<Array<AttributeKeyInput>>;
   name: Scalars['String'];
   parentId?: InputMaybe<Scalars['ObjectId']>;
+};
+
+export type CreateProductGroupInput = {
+  name: Scalars['String'];
+};
+
+export type CreateProductInput = {
+  attributeValues: Array<AttributeValueInput>;
+  categoryId: Scalars['ObjectId'];
+  defaultImageId: Scalars['ObjectId'];
+  imageIds: Array<Scalars['ObjectId']>;
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  productGroupId: Scalars['ObjectId'];
 };
 
 export type Image = {
   __typename?: 'Image';
   _id: Scalars['ObjectId'];
-  path: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   confirmVerificationCode: Scalars['String'];
   createCategory: Category;
+  createProduct: Product;
+  createProductGroup: ProductGroup;
   sendVerificationCode?: Maybe<Scalars['Boolean']>;
 };
 
@@ -56,6 +100,16 @@ export type MutationConfirmVerificationCodeArgs = {
 
 export type MutationCreateCategoryArgs = {
   input: CreateCategoryInput;
+};
+
+
+export type MutationCreateProductArgs = {
+  input: CreateProductInput;
+};
+
+
+export type MutationCreateProductGroupArgs = {
+  input: CreateProductGroupInput;
 };
 
 
@@ -72,9 +126,11 @@ export enum Permission {
 export type Product = {
   __typename?: 'Product';
   _id: Scalars['ObjectId'];
+  attributeValues: Array<AttributeValue>;
+  categoryId: Scalars['ObjectId'];
   createdAt?: Maybe<Scalars['Date']>;
-  defaultImage?: Maybe<Image>;
-  images?: Maybe<Array<Maybe<Image>>>;
+  defaultImagePath: Scalars['String'];
+  imageIds: Array<Scalars['ObjectId']>;
   name: Scalars['String'];
   price: Scalars['Float'];
   productGroupId: Scalars['ObjectId'];
@@ -83,6 +139,7 @@ export type Product = {
 export type ProductGroup = {
   __typename?: 'ProductGroup';
   _id: Scalars['ObjectId'];
+  name: Scalars['String'];
 };
 
 export type Query = {
@@ -192,12 +249,18 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  AttributeKey: ResolverTypeWrapper<AttributeKey>;
+  AttributeKeyInput: AttributeKeyInput;
+  AttributeType: AttributeType;
+  AttributeValue: ResolverTypeWrapper<AttributeValue>;
+  AttributeValueInput: AttributeValueInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Category: ResolverTypeWrapper<Category>;
   ConfirmVerificationCodeInput: ConfirmVerificationCodeInput;
   CreateCategoryInput: CreateCategoryInput;
+  CreateProductGroupInput: CreateProductGroupInput;
+  CreateProductInput: CreateProductInput;
   Date: ResolverTypeWrapper<Scalars['Date']>;
-  File: ResolverTypeWrapper<Scalars['File']>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Image: ResolverTypeWrapper<Image>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -215,12 +278,17 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  AttributeKey: AttributeKey;
+  AttributeKeyInput: AttributeKeyInput;
+  AttributeValue: AttributeValue;
+  AttributeValueInput: AttributeValueInput;
   Boolean: Scalars['Boolean'];
   Category: Category;
   ConfirmVerificationCodeInput: ConfirmVerificationCodeInput;
   CreateCategoryInput: CreateCategoryInput;
+  CreateProductGroupInput: CreateProductGroupInput;
+  CreateProductInput: CreateProductInput;
   Date: Scalars['Date'];
-  File: Scalars['File'];
   Float: Scalars['Float'];
   Image: Image;
   Mutation: {};
@@ -235,8 +303,21 @@ export type ResolversParentTypes = ResolversObject<{
   VerificationCode: VerificationCode;
 }>;
 
+export type AttributeKeyResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AttributeKey'] = ResolversParentTypes['AttributeKey']> = ResolversObject<{
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['AttributeType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type AttributeValueResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AttributeValue'] = ResolversParentTypes['AttributeValue']> = ResolversObject<{
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type CategoryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  attributeKeys?: Resolver<Maybe<Array<ResolversTypes['AttributeKey']>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<ResolversTypes['ObjectId']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -246,19 +327,17 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Date';
 }
 
-export interface FileScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['File'], any> {
-  name: 'File';
-}
-
 export type ImageResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Image'] = ResolversParentTypes['Image']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
-  path?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   confirmVerificationCode?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationConfirmVerificationCodeArgs, 'ConfirmVerificationCodeInput'>>;
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'input'>>;
+  createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'input'>>;
+  createProductGroup?: Resolver<ResolversTypes['ProductGroup'], ParentType, ContextType, RequireFields<MutationCreateProductGroupArgs, 'input'>>;
   sendVerificationCode?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSendVerificationCodeArgs, 'SendVerificationCodeInput'>>;
 }>;
 
@@ -268,9 +347,11 @@ export interface ObjectIdScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 
 export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  attributeValues?: Resolver<Array<ResolversTypes['AttributeValue']>, ParentType, ContextType>;
+  categoryId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  defaultImage?: Resolver<Maybe<ResolversTypes['Image']>, ParentType, ContextType>;
-  images?: Resolver<Maybe<Array<Maybe<ResolversTypes['Image']>>>, ParentType, ContextType>;
+  defaultImagePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  imageIds?: Resolver<Array<ResolversTypes['ObjectId']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   productGroupId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
@@ -279,6 +360,7 @@ export type ProductResolvers<ContextType = Context, ParentType extends Resolvers
 
 export type ProductGroupResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductGroup'] = ResolversParentTypes['ProductGroup']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -306,9 +388,10 @@ export type VerificationCodeResolvers<ContextType = Context, ParentType extends 
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  AttributeKey?: AttributeKeyResolvers<ContextType>;
+  AttributeValue?: AttributeValueResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
   Date?: GraphQLScalarType;
-  File?: GraphQLScalarType;
   Image?: ImageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   ObjectId?: GraphQLScalarType;

@@ -4,7 +4,7 @@ import type { FC } from "react";
 import styles from "./styles.module.scss";
 
 interface Props {
-  parentId?: string;
+  parentId: string | null;
 }
 
 const AddCategoryCard: FC<Props> = ({ parentId }) => {

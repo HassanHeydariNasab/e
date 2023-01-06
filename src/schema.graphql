@@ -1,6 +1,5 @@
 scalar ObjectId
 scalar Date
-scalar File
 
 type Query {
   hello: String
@@ -17,6 +16,8 @@ type Mutation {
     ConfirmVerificationCodeInput: ConfirmVerificationCodeInput!
   ): String!
   createCategory(input: CreateCategoryInput!): Category!
+  createProductGroup(input: CreateProductGroupInput!): ProductGroup!
+  createProduct(input: CreateProductInput!): Product!
 }
 
 input SendVerificationCodeInput {
@@ -35,6 +36,31 @@ input UserInput {
 input CreateCategoryInput {
   name: String!
   parentId: ObjectId
+  attributeKeys: [AttributeKeyInput!]
+}
+
+input AttributeKeyInput {
+  name: String!
+  type: AttributeType!
+}
+
+input CreateProductGroupInput {
+  name: String!
+}
+
+input CreateProductInput {
+  name: String!
+  categoryId: ObjectId!
+  productGroupId: ObjectId!
+  price: Float!
+  imageIds: [ObjectId!]!
+  defaultImageId: ObjectId!
+  attributeValues: [AttributeValueInput!]!
+}
+
+input AttributeValueInput {
+  name: String!
+  value: String!
 }
 
 enum Permission {
@@ -57,27 +83,46 @@ type VerificationCode {
   verificationCode: String!
 }
 
+enum AttributeType {
+  NUMBER
+  STRING
+}
+
+type AttributeKey {
+  name: String!
+  type: AttributeType!
+}
+
+type AttributeValue {
+  name: String!
+  value: String!
+}
+
 type Category {
   _id: ObjectId!
   name: String!
   parentId: ObjectId
+  attributeKeys: [AttributeKey!]
 }
 
 type ProductGroup {
   _id: ObjectId!
+  name: String!
 }
 
 type Product {
   _id: ObjectId!
+  categoryId: ObjectId!
   productGroupId: ObjectId!
   name: String!
   price: Float!
-  images: [Image]
-  defaultImage: Image
+  imageIds: [ObjectId!]!
+  defaultImagePath: String!
+  attributeValues: [AttributeValue!]!
   createdAt: Date
 }
 
 type Image {
   _id: ObjectId!
-  path: String!
+  name: String
 }

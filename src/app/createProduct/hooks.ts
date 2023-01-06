@@ -11,7 +11,7 @@ interface Props {
   parentId?: string;
 }
 
-export const useCreateCategory = ({ parentId }: Props) => {
+export const useCreateProduct = ({ parentId }: Props) => {
   const router = useRouter();
 
   const [createCategory, { loading: isSubmitting }] = useMutation<
@@ -54,15 +54,12 @@ export const useCreateCategory = ({ parentId }: Props) => {
   }>(GET_CATEGORIES);
 
   const onSubmit: SubmitHandler<FormSchema> = (data, event) => {
-    console.log({ data });
     const { name } = data;
-    /*
     createCategory({
       variables: {
         input: { name, parentId },
       },
     });
-    */
   };
 
   return {
