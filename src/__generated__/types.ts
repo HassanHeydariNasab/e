@@ -19,16 +19,16 @@ export type Scalars = {
 
 export type AttributeKey = {
   __typename?: 'AttributeKey';
+  kind: AttributeKind;
   name: Scalars['String'];
-  type: AttributeType;
 };
 
 export type AttributeKeyInput = {
+  kind: AttributeKind;
   name: Scalars['String'];
-  type: AttributeType;
 };
 
-export enum AttributeType {
+export enum AttributeKind {
   Number = 'NUMBER',
   String = 'STRING'
 }
@@ -251,7 +251,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   AttributeKey: ResolverTypeWrapper<AttributeKey>;
   AttributeKeyInput: AttributeKeyInput;
-  AttributeType: AttributeType;
+  AttributeKind: AttributeKind;
   AttributeValue: ResolverTypeWrapper<AttributeValue>;
   AttributeValueInput: AttributeValueInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -304,8 +304,8 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type AttributeKeyResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AttributeKey'] = ResolversParentTypes['AttributeKey']> = ResolversObject<{
+  kind?: Resolver<ResolversTypes['AttributeKind'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['AttributeType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

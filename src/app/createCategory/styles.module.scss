@@ -24,3 +24,41 @@
   font-size: large;
   margin-bottom: 1rem;
 }
+
+.attributes-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: c.$dark-primary;
+  font-weight: 700;
+  font-size: large;
+  margin-top: 1rem;
+  & > svg {
+    cursor: pointer;
+    font-size: x-large;
+    transition: color 150ms ease-out;
+    &:hover {
+      color: c.$primary;
+    }
+  }
+}
+
+.attribute-key {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-color: c.$dark-primary;
+  border-radius: v.$input-border-radius;
+  padding: 0.5rem;
+
+  &__remove {
+    font-size: x-large;
+    align-self: flex-end;
+    cursor: pointer;
+    color: c.$dark-primary;
+    transition: color 150ms ease-out;
+    &:hover {
+      color: c.$primary;
+    }
+  }
+}

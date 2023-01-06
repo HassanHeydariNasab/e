@@ -6,6 +6,10 @@ export const CREATE_CATEGROY = gql`
       _id
       name
       parentId
+      attributeKeys {
+        name
+        kind
+      }
     }
   }
 `;

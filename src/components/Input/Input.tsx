@@ -16,7 +16,12 @@ const Input = forwardRef<HTMLInputElement, Props>(
   ({ label, error, ...rest }, ref) => {
     return (
       <div className={styles["container"]}>
-        <label htmlFor={rest.name}>{label}</label>
+        <label htmlFor={rest.name}>
+          {label}
+          {rest.required && (
+            <span className={styles["label__required"]}> *</span>
+          )}
+        </label>
         <div className={styles["input-container"]}>
           <input {...rest} ref={ref} />
         </div>

@@ -6,6 +6,10 @@ export const GET_CATEGORIES = gql`
       _id
       name
       parentId
+      attributeKeys {
+        name
+        kind
+      }
     }
   }
 `;

@@ -6,7 +6,7 @@ import { CategoriesCollection } from "@models";
 
 export const createCategory: MutationResolvers["createCategory"] = async (
   _,
-  { input: { name, parentId } },
+  { input: { name, parentId, attributeKeys } },
   { permissions }
 ) => {
   if (!permissions || !permissions.includes(Permission.Admin)) {
@@ -30,6 +30,7 @@ export const createCategory: MutationResolvers["createCategory"] = async (
   const { insertedId } = await CategoriesCollection.insertOne({
     name,
     parentId,
+    attributeKeys,
   });
   const category = await CategoriesCollection.findOne({ _id: insertedId });
   if (category === null) {

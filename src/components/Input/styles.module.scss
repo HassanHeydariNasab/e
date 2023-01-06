@@ -18,6 +18,10 @@
   }
 }
 
+.label__required {
+  color: c.$dark-primary;
+}
+
 .input-container {
   input {
     background: unset;

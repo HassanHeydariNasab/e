@@ -1,17 +1,30 @@
+import { useState } from "react";
+import type { MouseEventHandler } from "react";
 import { useRouter } from "next/navigation";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import type { SubmitHandler } from "react-hook-form";
+import type {
+  SubmitHandler,
+  UseFormClearErrors,
+  UseFormUnregister,
+} from "react-hook-form";
 
-import { Category, MutationCreateCategoryArgs } from "@types";
+import type { Category, MutationCreateCategoryArgs } from "@types";
 import { CREATE_CATEGROY, GET_CATEGORIES } from "@operations";
 
 import type { FormSchema } from "./consts";
 
 interface Props {
   parentId?: string;
+  unregister: UseFormUnregister<FormSchema>;
+  clearErrors: UseFormClearErrors<FormSchema>;
 }
 
-export const useCreateCategory = ({ parentId }: Props) => {
+export const useCreateCategory = ({
+  parentId,
+  unregister,
+  clearErrors,
+}: Props) => {
+  const [attributes, setAttributes] = useState<number[]>([]);
   const router = useRouter();
 
   const [createCategory, { loading: isSubmitting }] = useMutation<
@@ -49,20 +62,44 @@ export const useCreateCategory = ({ parentId }: Props) => {
     },
   });
 
+  const onClickAddAttribute: MouseEventHandler = () => {
+    setAttributes((attributes) =>
+      attributes.length === 0
+        ? [0]
+        : [...attributes, (attributes?.at(-1) || 0) + 1]
+    );
+  };
+
+  const onClickRemoveAttribute: MouseEventHandler<SVGSVGElement> = (event) => {
+    const id = event.currentTarget.dataset.id;
+    console.log({ id });
+    if (id !== undefined) {
+      unregister(`attributeKeys.${+id}.name`);
+      unregister(`attributeKeys.${+id}.kind`);
+      setAttributes((attributes) =>
+        attributes.filter((attribute) => attribute !== +id)
+      );
+    }
+  };
+
   const { data: categoriesData, loading: isLoadingCategories } = useQuery<{
     categories: Category[];
   }>(GET_CATEGORIES);
 
   const onSubmit: SubmitHandler<FormSchema> = (data, event) => {
-    console.log({ data });
-    const { name } = data;
-    /*
+    event?.preventDefault();
+    const { name, attributeKeys } = data;
     createCategory({
       variables: {
-        input: { name, parentId },
-      },
+        input: {
+          name,
+          attributeKeys: attributeKeys?.filter(
+            (attributeKey) => !!attributeKey
+          ),
+          parentId,
+        },
+      } as MutationCreateCategoryArgs,
     });
-    */
   };
 
   return {
@@ -71,6 +108,9 @@ export const useCreateCategory = ({ parentId }: Props) => {
     )?.name,
     isLoadingCategories,
     isSubmitting,
+    attributes,
     onSubmit,
+    onClickAddAttribute,
+    onClickRemoveAttribute,
   };
 };

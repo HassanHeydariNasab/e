@@ -41,7 +41,7 @@ input CreateCategoryInput {
 
 input AttributeKeyInput {
   name: String!
-  type: AttributeType!
+  kind: AttributeKind!
 }
 
 input CreateProductGroupInput {
@@ -83,14 +83,14 @@ type VerificationCode {
   verificationCode: String!
 }
 
-enum AttributeType {
+enum AttributeKind {
   NUMBER
   STRING
 }
 
 type AttributeKey {
   name: String!
-  type: AttributeType!
+  kind: AttributeKind!
 }
 
 type AttributeValue {

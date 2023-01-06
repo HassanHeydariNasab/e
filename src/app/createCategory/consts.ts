@@ -1,11 +1,23 @@
-import { AttributeType } from "@types";
-import { z } from "zod";
+import { AttributeKind } from "@types";
+import * as yup from "yup";
 
-export const formSchema = z.object({
-  name: z.string().regex(/^.+$/, "Name is required"),
-  attributeKeys: z.array(
-    z.object({ name: z.string(), type: z.nativeEnum(AttributeType) })
-  ),
-});
+export const formSchema = yup
+  .object({
+    name: yup.string().min(1),
+    attributeKeys: yup
+      .array(
+        yup.object({
+          name: yup.string().min(1, "Attribute name is required."),
+          kind: yup
+            .string()
+            .matches(
+              new RegExp(`^${AttributeKind.Number}|${AttributeKind.String}$`),
+              "Select a type for the attribute."
+            ),
+        })
+      )
+      .optional(),
+  })
+  .strict();
 
-export type FormSchema = z.infer<typeof formSchema>;
+export type FormSchema = yup.InferType<typeof formSchema>;
