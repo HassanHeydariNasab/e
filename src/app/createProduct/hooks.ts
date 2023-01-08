@@ -2,49 +2,98 @@ import { useRouter } from "next/navigation";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import type { SubmitHandler } from "react-hook-form";
 
-import { Category, MutationCreateCategoryArgs } from "@types";
-import { CREATE_CATEGROY, GET_CATEGORIES } from "@operations";
+import type {
+  Category,
+  MutationCreateProductArgs,
+  MutationCreateProductGroupArgs,
+  Product,
+  ProductGroup,
+} from "@types";
+import {
+  GET_CATEGORIES,
+  CREATE_PRODUCT_GROUP,
+  GET_PRODUCT_GROUPS,
+  CREATE_PRODUCT,
+} from "@operations";
+import { allAttributeKeys } from "@services";
 
-import type { FormSchema } from "./consts";
+import type { ProductFormSchema, ProductGroupFormSchema } from "./consts";
 
 interface Props {
-  parentId?: string;
+  categoryId: string | null;
 }
 
-export const useCreateProduct = ({ parentId }: Props) => {
+export const useCreateProduct = ({ categoryId }: Props) => {
   const router = useRouter();
 
-  const [createCategory, { loading: isSubmitting }] = useMutation<
-    { createCategory: Category },
-    MutationCreateCategoryArgs
-  >(CREATE_CATEGROY, {
+  if (categoryId === null) router.replace("/");
+
+  const [createProductGroup, { loading: isSubmittingProductGroup }] =
+    useMutation<
+      { createProductGroup: ProductGroup },
+      MutationCreateProductGroupArgs
+    >(CREATE_PRODUCT_GROUP, {
+      update(cache, result) {
+        cache.modify({
+          fields: {
+            productGroups(existingProductGroups = []) {
+              const newProductGroupRef = cache.writeFragment({
+                data: result.data?.createProductGroup,
+                fragment: gql`
+                  fragment newProductGroup on ProductGroup {
+                    _id
+                    categoryId
+                    isHidden
+                    name
+                  }
+                `,
+              });
+              return [...existingProductGroups, newProductGroupRef];
+            },
+          },
+        });
+      },
+      onQueryUpdated(observableQuery) {
+        observableQuery.refetch();
+        return false;
+      },
+    });
+
+  const [createProduct, { loading: isSubmittingProduct }] = useMutation<
+    { createProduct: Product },
+    MutationCreateProductArgs
+  >(CREATE_PRODUCT, {
     update(cache, result) {
       cache.modify({
         fields: {
-          categories(existingCategories = []) {
-            const newCategoryRef = cache.writeFragment({
-              data: result.data?.createCategory,
+          products(existingProducts = []) {
+            const newProductRef = cache.writeFragment({
+              data: result.data?.createProduct,
               fragment: gql`
-                fragment newCategory on Category {
+                fragment newProduct on Product {
                   _id
+                  attributeValues {
+                    name
+                    value
+                  }
+                  categoryId
+                  createdAt
+                  defaultImagePath
+                  imageIds
+                  isHidden
                   name
-                  parentId
+                  price
+                  productGroupId
                 }
               `,
             });
-            return [...existingCategories, newCategoryRef];
+            return [...existingProducts, newProductRef];
           },
         },
       });
     },
     onQueryUpdated(observableQuery) {
       observableQuery.refetch();
-      /*
-        FIXME our optimistic update is not useful if we send
-        another request for getting page (router.replace/push).
-        but going back is not a general case
-      */
-      router.back();
       return false;
     },
   });
@@ -53,21 +102,50 @@ export const useCreateProduct = ({ parentId }: Props) => {
     categories: Category[];
   }>(GET_CATEGORIES);
 
-  const onSubmit: SubmitHandler<FormSchema> = (data, event) => {
+  const { data: productGroupsData, loading: isLoadingProductGroups } =
+    useQuery<{
+      productGroups: ProductGroup[];
+    }>(GET_PRODUCT_GROUPS);
+
+  const category = categoriesData?.categories?.find(
+    (category) => category._id === categoryId
+  );
+
+  const attributeKeys =
+    category && categoriesData?.categories
+      ? allAttributeKeys(category, categoriesData.categories)
+      : [];
+
+  const onSubmitProductGroup: SubmitHandler<ProductGroupFormSchema> = (
+    data,
+    event
+  ) => {
     const { name } = data;
-    createCategory({
+    createProductGroup({
       variables: {
-        input: { name, parentId },
-      },
+        input: { name, categoryId },
+      } as MutationCreateProductGroupArgs,
+    });
+  };
+
+  const onSubmitProduct: SubmitHandler<ProductFormSchema> = (data, event) => {
+    const { attributeValues, name, productGroupId } = data;
+    createProduct({
+      variables: {
+        input: { attributeValues, name, categoryId, productGroupId },
+      } as MutationCreateProductArgs,
     });
   };
 
   return {
-    parentName: categoriesData?.categories?.find(
-      (category) => category._id === parentId
-    )?.name,
+    category,
+    attributeKeys,
     isLoadingCategories,
-    isSubmitting,
-    onSubmit,
+    isSubmittingProductGroup,
+    productGroups: productGroupsData?.productGroups || [],
+    isLoadingProductGroups,
+    isSubmittingProduct,
+    onSubmitProductGroup,
+    onSubmitProduct,
   };
 };

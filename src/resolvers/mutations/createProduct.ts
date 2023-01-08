@@ -22,8 +22,10 @@ export const createProduct: MutationResolvers["createProduct"] = async (
 ) => {
   if (
     !permissions ||
-    !permissions.includes(Permission.Admin) ||
-    !permissions.includes(Permission.Product)
+    !(
+      permissions.includes(Permission.Admin) ||
+      permissions.includes(Permission.Product)
+    )
   ) {
     throw new GraphQLError("Permission denied.", {
       extensions: { http: { status: 403 } },

@@ -66,13 +66,11 @@ const Home: NextPage = () => {
       </div>
       <div className={styles["products"]}>
         <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        {(permissions?.includes(Permission.Admin) ||
-          permissions?.includes(Permission.Product)) && (
-          <AddProductCard categoryId={categoryId} />
-        )}
+        {categoryId &&
+          (permissions?.includes(Permission.Admin) ||
+            permissions?.includes(Permission.Product)) && (
+            <AddProductCard categoryId={categoryId} />
+          )}
       </div>
     </main>
   );

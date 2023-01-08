@@ -24,7 +24,10 @@ function CreateCategoryPage() {
     register,
     unregister,
     handleSubmit,
-  } = useForm<FormSchema>({ resolver: yupResolver(formSchema) });
+  } = useForm<FormSchema>({
+    resolver: yupResolver(formSchema),
+    defaultValues: { attributeKeys: [] },
+  });
 
   const {
     parentName,
@@ -42,7 +45,7 @@ function CreateCategoryPage() {
 
   return (
     <main className={styles["main"]}>
-      <form onSubmit={handleSubmit(onSubmit, (e) => console.log({ e }))}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         {!isLoadingCategories && (
           <span className={styles["title"]}>
             {parentName

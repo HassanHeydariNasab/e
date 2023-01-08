@@ -72,7 +72,6 @@ export const useCreateCategory = ({
 
   const onClickRemoveAttribute: MouseEventHandler<SVGSVGElement> = (event) => {
     const id = event.currentTarget.dataset.id;
-    console.log({ id });
     if (id !== undefined) {
       unregister(`attributeKeys.${+id}.name`);
       unregister(`attributeKeys.${+id}.kind`);

@@ -16,7 +16,7 @@ export const formSchema = yup
             ),
         })
       )
-      .optional(),
+      .required(),
   })
   .strict();
 

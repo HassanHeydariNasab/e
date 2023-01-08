@@ -6,15 +6,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
-  > form {
+.forms {
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  border: 4px solid c.$dark-primary;
+  border-radius: v.$input-border-radius;
+  max-width: 480px;
+  gap: 2rem;
+
+  & > form {
     display: flex;
     flex-direction: column;
-    gap: 1em;
-    max-width: 480px;
-    padding: 32px;
-    border: 4px solid c.$dark-primary;
-    border-radius: v.$input-border-radius;
+    gap: 1rem;
   }
 }
 

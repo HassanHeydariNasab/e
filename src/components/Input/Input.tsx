@@ -15,7 +15,7 @@ interface Props
 const Input = forwardRef<HTMLInputElement, Props>(
   ({ label, error, ...rest }, ref) => {
     return (
-      <div className={styles["container"]}>
+      <div className={styles["container"]} hidden={rest.hidden}>
         <label htmlFor={rest.name}>
           {label}
           {rest.required && (

@@ -1,15 +1,18 @@
 import { GraphQLError } from "graphql";
+import { ObjectId } from "mongodb";
 
 import { Permission } from "@types";
 import type { MutationResolvers } from "@types";
 import { ProductGroupsCollection } from "@models";
 
 export const createProductGroup: MutationResolvers["createProductGroup"] =
-  async (_, { input: { name } }, { permissions }) => {
+  async (_, { input: { name, categoryId } }, { permissions }) => {
     if (
       !permissions ||
-      !permissions.includes(Permission.Admin) ||
-      !permissions.includes(Permission.Product)
+      !(
+        permissions.includes(Permission.Admin) ||
+        permissions.includes(Permission.Product)
+      )
     ) {
       throw new GraphQLError("Permission denied.", {
         extensions: { http: { status: 403 } },
@@ -22,6 +25,7 @@ export const createProductGroup: MutationResolvers["createProductGroup"] =
 
     const { insertedId } = await ProductGroupsCollection.insertOne({
       name,
+      categoryId: new ObjectId(categoryId),
     });
     const productGroup = await ProductGroupsCollection.findOne({
       _id: insertedId,

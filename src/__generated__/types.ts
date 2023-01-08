@@ -47,7 +47,8 @@ export type AttributeValueInput = {
 export type Category = {
   __typename?: 'Category';
   _id: Scalars['ObjectId'];
-  attributeKeys?: Maybe<Array<AttributeKey>>;
+  attributeKeys: Array<AttributeKey>;
+  isHidden?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   parentId?: Maybe<Scalars['ObjectId']>;
 };
@@ -58,12 +59,13 @@ export type ConfirmVerificationCodeInput = {
 };
 
 export type CreateCategoryInput = {
-  attributeKeys?: InputMaybe<Array<AttributeKeyInput>>;
+  attributeKeys: Array<AttributeKeyInput>;
   name: Scalars['String'];
   parentId?: InputMaybe<Scalars['ObjectId']>;
 };
 
 export type CreateProductGroupInput = {
+  categoryId: Scalars['ObjectId'];
   name: Scalars['String'];
 };
 
@@ -131,6 +133,7 @@ export type Product = {
   createdAt?: Maybe<Scalars['Date']>;
   defaultImagePath: Scalars['String'];
   imageIds: Array<Scalars['ObjectId']>;
+  isHidden?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   price: Scalars['Float'];
   productGroupId: Scalars['ObjectId'];
@@ -139,15 +142,43 @@ export type Product = {
 export type ProductGroup = {
   __typename?: 'ProductGroup';
   _id: Scalars['ObjectId'];
+  categoryId: Scalars['ObjectId'];
+  isHidden?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
+};
+
+export type ProductsFilter = {
+  attributeValues?: InputMaybe<Array<AttributeValueInput>>;
+  categoryId?: InputMaybe<Scalars['ObjectId']>;
+  isHidden?: InputMaybe<Scalars['Boolean']>;
+  productGroupId?: InputMaybe<Scalars['ObjectId']>;
+};
+
+export type ProductsOptions = {
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<ProductsSortInput>;
+};
+
+export type ProductsSortInput = {
+  createdAt?: InputMaybe<Scalars['Int']>;
+  price?: InputMaybe<Scalars['Int']>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  categories?: Maybe<Array<Maybe<Category>>>;
+  categories: Array<Category>;
   hello?: Maybe<Scalars['String']>;
   me: User;
+  productGroups: Array<ProductGroup>;
+  products: Array<Product>;
   user: User;
+};
+
+
+export type QueryProductsArgs = {
+  filter?: InputMaybe<ProductsFilter>;
+  options?: InputMaybe<ProductsOptions>;
 };
 
 
@@ -263,11 +294,15 @@ export type ResolversTypes = ResolversObject<{
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Image: ResolverTypeWrapper<Image>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   ObjectId: ResolverTypeWrapper<Scalars['ObjectId']>;
   Permission: Permission;
   Product: ResolverTypeWrapper<Product>;
   ProductGroup: ResolverTypeWrapper<ProductGroup>;
+  ProductsFilter: ProductsFilter;
+  ProductsOptions: ProductsOptions;
+  ProductsSortInput: ProductsSortInput;
   Query: ResolverTypeWrapper<{}>;
   SendVerificationCodeInput: SendVerificationCodeInput;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -291,10 +326,14 @@ export type ResolversParentTypes = ResolversObject<{
   Date: Scalars['Date'];
   Float: Scalars['Float'];
   Image: Image;
+  Int: Scalars['Int'];
   Mutation: {};
   ObjectId: Scalars['ObjectId'];
   Product: Product;
   ProductGroup: ProductGroup;
+  ProductsFilter: ProductsFilter;
+  ProductsOptions: ProductsOptions;
+  ProductsSortInput: ProductsSortInput;
   Query: {};
   SendVerificationCodeInput: SendVerificationCodeInput;
   String: Scalars['String'];
@@ -317,7 +356,8 @@ export type AttributeValueResolvers<ContextType = Context, ParentType extends Re
 
 export type CategoryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
-  attributeKeys?: Resolver<Maybe<Array<ResolversTypes['AttributeKey']>>, ParentType, ContextType>;
+  attributeKeys?: Resolver<Array<ResolversTypes['AttributeKey']>, ParentType, ContextType>;
+  isHidden?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<ResolversTypes['ObjectId']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -352,6 +392,7 @@ export type ProductResolvers<ContextType = Context, ParentType extends Resolvers
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   defaultImagePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   imageIds?: Resolver<Array<ResolversTypes['ObjectId']>, ParentType, ContextType>;
+  isHidden?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   productGroupId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
@@ -360,14 +401,18 @@ export type ProductResolvers<ContextType = Context, ParentType extends Resolvers
 
 export type ProductGroupResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductGroup'] = ResolversParentTypes['ProductGroup']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  categoryId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  isHidden?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['Category']>>>, ParentType, ContextType>;
+  categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
   hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  productGroups?: Resolver<Array<ResolversTypes['ProductGroup']>, ParentType, ContextType>;
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType, Partial<QueryProductsArgs>>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'UserInput'>>;
 }>;
 

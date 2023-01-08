@@ -1,7 +1,7 @@
-import { z } from "zod";
+import * as yup from "yup";
 
-export const formSchema = z.object({
-  phoneNumber: z.string().regex(/^\+?\d{5,20}$/, "Phone number is invalid"),
+export const formSchema = yup.object({
+  phoneNumber: yup.string().matches(/^\+?\d{5,20}$/, "Phone number is invalid"),
 });
 
-export type FormSchema = z.infer<typeof formSchema>;
+export type FormSchema = yup.InferType<typeof formSchema>;

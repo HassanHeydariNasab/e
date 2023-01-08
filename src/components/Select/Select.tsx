@@ -28,7 +28,7 @@ interface Props
   onBlur: ChangeHandler;
 }
 
-const Input = forwardRef<HTMLInputElement, Props>(
+const Select = forwardRef<HTMLInputElement, Props>(
   ({ label, error, options, onChange, onBlur, ...rest }, ref) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -118,7 +118,12 @@ const Input = forwardRef<HTMLInputElement, Props>(
 
     return (
       <div className={styles["container"]}>
-        <label htmlFor={rest.name}>{label}</label>
+        <label htmlFor={rest.name}>
+          {label}
+          {rest.required && (
+            <span className={styles["label__required"]}> *</span>
+          )}
+        </label>
         <div className={styles["input-container"]} onClick={onClickInput}>
           <input ref={inputRef} {...rest} onBlur={onBlurInput} disabled />
         </div>
@@ -141,4 +146,4 @@ const Input = forwardRef<HTMLInputElement, Props>(
   }
 );
 
-export default Input;
+export default Select;

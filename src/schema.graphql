@@ -5,7 +5,9 @@ type Query {
   hello: String
   user(UserInput: UserInput!): User!
   me: User!
-  categories: [Category]
+  categories: [Category!]!
+  productGroups: [ProductGroup!]!
+  products(filter: ProductsFilter, options: ProductsOptions): [Product!]!
 }
 
 type Mutation {
@@ -36,7 +38,7 @@ input UserInput {
 input CreateCategoryInput {
   name: String!
   parentId: ObjectId
-  attributeKeys: [AttributeKeyInput!]
+  attributeKeys: [AttributeKeyInput!]!
 }
 
 input AttributeKeyInput {
@@ -46,21 +48,40 @@ input AttributeKeyInput {
 
 input CreateProductGroupInput {
   name: String!
+  categoryId: ObjectId!
 }
 
 input CreateProductInput {
-  name: String!
-  categoryId: ObjectId!
-  productGroupId: ObjectId!
-  price: Float!
-  imageIds: [ObjectId!]!
-  defaultImageId: ObjectId!
   attributeValues: [AttributeValueInput!]!
+  categoryId: ObjectId!
+  defaultImageId: ObjectId!
+  imageIds: [ObjectId!]!
+  name: String!
+  price: Float!
+  productGroupId: ObjectId!
 }
 
 input AttributeValueInput {
   name: String!
   value: String!
+}
+
+input ProductsFilter {
+  categoryId: ObjectId
+  productGroupId: ObjectId
+  attributeValues: [AttributeValueInput!]
+  isHidden: Boolean
+}
+
+input ProductsOptions {
+  skip: Int = 0
+  limit: Int = 12
+  sort: ProductsSortInput
+}
+
+input ProductsSortInput {
+  createdAt: Int
+  price: Int
 }
 
 enum Permission {
@@ -102,12 +123,15 @@ type Category {
   _id: ObjectId!
   name: String!
   parentId: ObjectId
-  attributeKeys: [AttributeKey!]
+  attributeKeys: [AttributeKey!]!
+  isHidden: Boolean
 }
 
 type ProductGroup {
   _id: ObjectId!
   name: String!
+  categoryId: ObjectId!
+  isHidden: Boolean
 }
 
 type Product {
@@ -120,6 +144,7 @@ type Product {
   defaultImagePath: String!
   attributeValues: [AttributeValue!]!
   createdAt: Date
+  isHidden: Boolean
 }
 
 type Image {

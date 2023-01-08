@@ -3,7 +3,7 @@
 import React from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Button, Input } from "@components";
 
@@ -23,7 +23,7 @@ function ConfirmVerificationCodePage() {
     formState: { errors },
     register,
     handleSubmit,
-  } = useForm<FormSchema>({ resolver: zodResolver(formSchema) });
+  } = useForm<FormSchema>({ resolver: yupResolver(formSchema) });
 
   return (
     <main className={styles["main"]}>
