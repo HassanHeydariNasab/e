@@ -9,14 +9,12 @@ export type ProductGroupFormSchema = yup.InferType<
 >;
 
 export const productFormSchema = yup.object({
-  attributeValues: yup
-    .array()
-    .of(
-      yup.object({
-        name: yup.string(),
-        value: yup.string().required("Attribute value is requierd."),
-      })
-    ),
+  attributeValues: yup.array().of(
+    yup.object({
+      name: yup.string(),
+      value: yup.string().required("Attribute value is requierd."),
+    })
+  ),
   defaultImageId: yup.string().length(24, "Select a valid item."),
   imageIds: yup.array().of(yup.string().length(24, "Select a valid item.")),
   name: yup.string().min(1, "Name is required"),
@@ -28,3 +26,14 @@ export const productFormSchema = yup.object({
 });
 
 export type ProductFormSchema = yup.InferType<typeof productFormSchema>;
+
+export const imagesFormSchema = yup.object({
+  file: yup.mixed().test("file", "You need to provide a file", (value) => {
+    if (value.length > 0) {
+      return true;
+    }
+    return false;
+  }),
+});
+
+export type ImagesFormSchema = yup.InferType<typeof imagesFormSchema>;

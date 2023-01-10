@@ -1,5 +1,7 @@
 import type { Category } from "@types";
+import { ObjectId } from "mongodb";
 
+// TODO remove visited nodes to prevent loop
 export function allAttributeKeys(category: Category, categories: Category[]) {
   const selectedCategories = [category];
 
@@ -16,6 +18,7 @@ export function allAttributeKeys(category: Category, categories: Category[]) {
       if (parent) {
         selectedCategories.push(parent);
         i = 0;
+        // TODO optimize it: remove selected category
       } else {
         break;
       }
@@ -23,4 +26,25 @@ export function allAttributeKeys(category: Category, categories: Category[]) {
   }
 
   return selectedCategories.flatMap((category) => category.attributeKeys);
+}
+
+// TODO remove visited nodes to prevent loop
+export function childrenCategories(
+  categoryId: ObjectId,
+  categories: Category[]
+) {
+  console.log({ categoryId });
+  const selectedCategories: Category["_id"][] = [categoryId];
+  const children = categories.filter((category) =>
+    (category.parentId as ObjectId)?.equals(categoryId)
+  );
+  console.log({ children });
+  if (children.length === 0) {
+    return selectedCategories;
+  }
+  for (let child of children) {
+    selectedCategories.push(...childrenCategories(child._id, categories));
+  }
+  console.log({ selectedCategories });
+  return selectedCategories;
 }

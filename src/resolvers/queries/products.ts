@@ -1,7 +1,9 @@
+import type { Filter, FindOptions } from "mongodb";
+
 import { Permission, Product } from "@types";
 import type { QueryResolvers } from "@types";
-import { ProductsCollection } from "@models";
-import { Filter, FindOptions } from "mongodb";
+import { CategoriesCollection, ProductsCollection } from "@models";
+import { childrenCategories } from "@services";
 
 export const products: QueryResolvers["products"] = async (
   _,
@@ -17,7 +19,7 @@ export const products: QueryResolvers["products"] = async (
     ...(filter.categoryId && { categoryId: filter.categoryId }),
     ...(filter.productGroupId && { productGroupId: filter.productGroupId }),
     ...(filter.attributeValues && { attributeValues: filter.attributeValues }),
-    ...(filter.isHidden ? { isHidden: true } : { $exists: false }),
+    ...(filter.isHidden && { isHidden: true }),
   };
 
   const modifiedOptions: FindOptions = {
@@ -37,6 +39,11 @@ export const products: QueryResolvers["products"] = async (
   ) {
     modifiedFilter["isHidden"] = { $exists: false };
   }
+
+  const categories = await CategoriesCollection.find().toArray();
+
+  const children = childrenCategories(filter.categoryId, categories);
+  modifiedFilter.categoryId = { $in: children };
 
   const products = await ProductsCollection.find(
     modifiedFilter,

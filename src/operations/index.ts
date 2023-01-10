@@ -6,3 +6,4 @@ export * from "./createProductGroup";
 export * from "./createProduct";
 export * from "./getCategories";
 export * from "./getProductGroups";
+export * from "./getProducts";

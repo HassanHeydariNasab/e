@@ -1,13 +1,33 @@
-import { Permission } from "@types";
+import type { Filter, FindOptions } from "mongodb";
+
+import { Permission, ProductGroup } from "@types";
 import type { QueryResolvers } from "@types";
 import { ProductGroupsCollection } from "@models";
 
 export const productGroups: QueryResolvers["productGroups"] = async (
   _,
-  __,
+  { filter, options },
   { permissions }
 ) => {
-  let filter = {};
+  if (!filter) filter = {};
+  if (!options) options = {};
+
+  console.log({ filter, options });
+
+  const modifiedFilter: Filter<Omit<ProductGroup, "_id">> = {
+    ...(filter.categoryId && { categoryId: filter.categoryId }),
+    ...(filter.isHidden
+      ? { isHidden: true }
+      : { isHidden: { $exists: false } }),
+  };
+
+  const modifiedOptions: FindOptions = {
+    ...(options.skip && { skip: options.skip }),
+    ...(options.limit && { limit: options.limit }),
+    ...(options.sort
+      ? { sort: options.sort as FindOptions["sort"] }
+      : { sort: { createdAt: -1 } }),
+  };
   if (
     !permissions ||
     !(
@@ -15,10 +35,11 @@ export const productGroups: QueryResolvers["productGroups"] = async (
       permissions.includes(Permission.Product)
     )
   ) {
-    filter = { isHidden: { $exists: false } };
+    modifiedFilter.isHidden = { $exists: false };
   }
-  const productGroups = await ProductGroupsCollection.find(filter, {
-    sort: { name: 1 },
-  }).toArray();
+  const productGroups = await ProductGroupsCollection.find(
+    modifiedFilter,
+    modifiedOptions
+  ).toArray();
   return productGroups;
 };

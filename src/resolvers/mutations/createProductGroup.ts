@@ -25,7 +25,8 @@ export const createProductGroup: MutationResolvers["createProductGroup"] =
 
     const { insertedId } = await ProductGroupsCollection.insertOne({
       name,
-      categoryId: new ObjectId(categoryId),
+      categoryId,
+      createdAt: new Date(),
     });
     const productGroup = await ProductGroupsCollection.findOne({
       _id: insertedId,

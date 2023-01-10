@@ -3,19 +3,23 @@
 import React, { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { IoArrowBack } from "react-icons/io5";
 
-import { Button, Input, Select } from "@components";
+import { Button, FileInput, Input, Select } from "@components";
 
 import {
+  imagesFormSchema,
   productFormSchema,
-  ProductFormSchema,
   productGroupFormSchema,
 } from "./consts";
-import type { ProductGroupFormSchema } from "./consts";
+import type {
+  ProductGroupFormSchema,
+  ImagesFormSchema,
+  ProductFormSchema,
+} from "./consts";
 import { useCreateProduct } from "./hooks";
 import styles from "./styles.module.scss";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 function CreateProductPage() {
   const router = useRouter();
@@ -24,23 +28,10 @@ function CreateProductPage() {
   const categoryId = searchParams.get("categoryId");
 
   const {
-    category,
-    attributeKeys,
-    isLoadingCategories,
-    isSubmittingProductGroup,
-    isSubmittingProduct,
-    productGroups,
-    isLoadingProductGroups,
-    onSubmitProductGroup,
-    onSubmitProduct,
-  } = useCreateProduct({
-    categoryId: categoryId,
-  });
-
-  const {
     formState: { errors: errorsProductGroup },
     register: registerProductGroup,
     handleSubmit: handleSubmitProductGroup,
+    reset: resetProductGroup,
   } = useForm<ProductGroupFormSchema>({
     resolver: yupResolver(productGroupFormSchema),
   });
@@ -52,6 +43,31 @@ function CreateProductPage() {
   } = useForm<ProductFormSchema>({
     resolver: yupResolver(productFormSchema),
     defaultValues: { price: 0 },
+  });
+
+  const {
+    formState: { errors: errorsImages },
+    register: registerImages,
+    handleSubmit: handleSubmitImages,
+  } = useForm<ImagesFormSchema>({
+    resolver: yupResolver(imagesFormSchema),
+  });
+
+  const {
+    category,
+    attributeKeys,
+    isLoadingCategories,
+    isSubmittingProductGroup,
+    isSubmittingProduct,
+    productGroups,
+    images,
+    isLoadingProductGroups,
+    onSubmitImages,
+    onSubmitProductGroup,
+    onSubmitProduct,
+  } = useCreateProduct({
+    categoryId,
+    resetProductGroup,
   });
 
   useEffect(() => {
@@ -80,6 +96,17 @@ function CreateProductPage() {
             label="Product Group Name"
           />
           <Button isLoading={isSubmittingProductGroup}>Create</Button>
+        </form>
+        <form onChange={handleSubmitImages(onSubmitImages)}>
+          {images.map((image, index) => (
+            <img src={image.preview} key={image.preview} />
+          ))}
+          <FileInput
+            {...registerImages("file")}
+            error={errorsImages?.file?.message?.toString()}
+            label="Product Image"
+            accept="image/*"
+          />
         </form>
         <form onSubmit={handleSubmitProduct(onSubmitProduct)}>
           <Select

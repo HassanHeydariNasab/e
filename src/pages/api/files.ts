@@ -45,14 +45,17 @@ const fileUpload: NextApiHandler = async (req, res) => {
         const { insertedId } = await ImagesCollection.insertOne({
           name: file[1].originalFilename,
         });
-        await fs.rename(tempPath, targetPath + insertedId);
-        res.status(201);
+        await fs.copyFile(
+          tempPath,
+          path.join(targetPath, insertedId.toHexString())
+        );
+        res.status(201).json({ _id: insertedId });
         return;
       }
     }
-    res.status(500);
+    res.status(500).json(null);
   } else {
-    res.status(405);
+    res.status(405).json(null);
   }
 };
 

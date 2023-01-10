@@ -7,40 +7,37 @@ export const GraphQLDate: GraphQLScalarType =
     description: "Date field",
 
     serialize(value) {
-      if (Number.isInteger(value as number)) return value;
+      if (value instanceof Date) return value.toISOString();
       throw new GraphQLError(
-        `Value is not a valid date object of form: ${value}`
+        `Value is not a valid Date object. type:"${typeof value}" value:${value} `
       );
     },
 
     parseValue(value) {
-      if (Number.isInteger(value as number)) return value;
+      if (typeof value === "string") return new Date(value);
       throw new GraphQLError(
-        `Value is not a valid date object of form: ${value}`
+        `Value is not a valid Date.ISOString string. type:"${typeof value}" value:${value} `
       );
     },
 
     parseLiteral(ast: ValueNode) {
-      if (ast.kind !== Kind.INT) {
+      if (ast.kind !== Kind.STRING) {
         throw new GraphQLError(
-          `Can only validate numbers as date object but got a: ${ast.kind}`,
+          `Value is not a valid Date.ISOString string. ast.kind:"${ast.kind}"`,
           {
             nodes: [ast],
           }
         );
       }
 
-      if (Number.isInteger(ast.value)) return ast.value;
-      throw new GraphQLError(
-        `Value is not a valid date object of form: ${ast.value}`,
-        { nodes: ast }
-      );
+      if (typeof ast.value === "string") return new Date(ast.value);
+      throw new GraphQLError(`Value is strange!`, { nodes: ast });
     },
     extensions: {
-      codegenScalarType: "number",
+      codegenScalarType: "string",
       jsonSchema: {
         title: "Date",
-        type: "number",
+        type: "string",
       },
     },
   });

@@ -33,11 +33,12 @@ export const useConfirmVerificationCode = ({ phoneNumber }: Props) => {
   });
 
   const onSubmit: SubmitHandler<FormSchema> = (data, event) => {
+    const { verificationCode } = data;
     confirmVerificationCode({
       variables: {
         ConfirmVerificationCodeInput: {
           phoneNumber,
-          verificationCode: data.verificationCode,
+          verificationCode,
         },
       },
     });

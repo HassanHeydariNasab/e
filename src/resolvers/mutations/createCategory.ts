@@ -1,5 +1,4 @@
 import { GraphQLError } from "graphql";
-import { ObjectId } from "mongodb";
 
 import { MutationResolvers, Permission } from "@types";
 import { CategoriesCollection } from "@models";
@@ -21,7 +20,7 @@ export const createCategory: MutationResolvers["createCategory"] = async (
   if (
     parentId &&
     (await CategoriesCollection.countDocuments({
-      _id: new ObjectId(parentId),
+      _id: parentId,
     })) !== 1
   ) {
     throw new GraphQLError("Category with this parentId doesn't exist.");

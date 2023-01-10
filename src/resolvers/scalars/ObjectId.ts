@@ -1,4 +1,5 @@
 import { Kind, GraphQLScalarType, ValueNode, GraphQLError } from "graphql";
+import { ObjectId } from "mongodb";
 
 const MONGODB_OBJECTID_REGEX = /*#__PURE__*/ /^[A-Fa-f0-9]{24}$/;
 
@@ -10,29 +11,29 @@ export const GraphQLObjectId: GraphQLScalarType =
       "A field whose value conforms with the standard mongodb object ID as described here: https://docs.mongodb.com/manual/reference/method/ObjectId/#ObjectId. Example: 5e5677d71bdc2ae76344968c",
 
     serialize(value) {
-      if (!MONGODB_OBJECTID_REGEX.test(value as string)) {
+      if (!(value instanceof ObjectId)) {
         throw new GraphQLError(
-          `Value is not a valid mongodb object id of form: ${value}`
+          `Value is not a valid mongodb ObjectId. type:${typeof value} value:${value}`
         );
       }
 
-      return value;
+      return value.toHexString();
     },
 
     parseValue(value) {
       if (!MONGODB_OBJECTID_REGEX.test(value as string)) {
         throw new GraphQLError(
-          `Value is not a valid mongodb object id of form: ${value}`
+          `Couldn't construct a mongodb ObjectId. type:${typeof value} value:${value}`
         );
       }
 
-      return value;
+      return new ObjectId(value as string);
     },
 
     parseLiteral(ast: ValueNode) {
       if (ast.kind !== Kind.STRING) {
         throw new GraphQLError(
-          `Can only validate strings as mongodb object id but got a: ${ast.kind}`,
+          `Couldn't construct a mongodb ObjectId. type:${ast.kind}`,
           {
             nodes: [ast],
           }
@@ -41,12 +42,12 @@ export const GraphQLObjectId: GraphQLScalarType =
 
       if (!MONGODB_OBJECTID_REGEX.test(ast.value)) {
         throw new GraphQLError(
-          `Value is not a valid mongodb object id of form: ${ast.value}`,
+          `Couldn't construct a mongodb ObjectId. type:${ast.kind} value: ${ast.value}`,
           { nodes: ast }
         );
       }
 
-      return ast.value;
+      return new ObjectId(ast.value);
     },
     extensions: {
       codegenScalarType: "string",

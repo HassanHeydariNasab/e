@@ -1,12 +1,17 @@
 import { gql } from "@apollo/client";
 
 export const GET_PRODUCT_GROUPS = gql`
-  query getProductGroups {
-    productGroups {
+  query getProductGroups(
+    $filter: ProductGroupsFilter
+    $options: ProductGroupsOptions
+  ) {
+    productGroups(filter: $filter, options: $options) {
       _id
-      name
       categoryId
+      createdAt
       isHidden
+      name
+      __typename
     }
   }
 `;

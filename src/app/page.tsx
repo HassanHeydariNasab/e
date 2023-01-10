@@ -1,7 +1,8 @@
 "use client";
 
-import type { NextPage } from "next";
 import { useSearchParams } from "next/navigation";
+import { IoArrowBack } from "react-icons/io5";
+import clsx from "clsx";
 
 import {
   AddCategoryCard,
@@ -10,15 +11,13 @@ import {
   MyLink,
   ProductCard,
 } from "@components";
+import { Permission } from "@types";
+import { merienda } from "@styles/fonts";
 
 import styles from "./styles.module.scss";
 import { useHome } from "./hooks";
-import { Permission } from "@types";
-import { IoArrowBack } from "react-icons/io5";
-import clsx from "clsx";
-import { merienda } from "@styles/fonts";
 
-const Home: NextPage = () => {
+function Home() {
   const searchParams = useSearchParams();
 
   const categoryId = searchParams.get("categoryId");
@@ -28,6 +27,7 @@ const Home: NextPage = () => {
     currentCategory,
     subcategories,
     isLoadingCategories,
+    products,
     permissions,
   } = useHome({
     categoryId,
@@ -65,7 +65,9 @@ const Home: NextPage = () => {
         )}
       </div>
       <div className={styles["products"]}>
-        <ProductCard />
+        {products.map((product) => (
+          <ProductCard product={product} key={product._id} />
+        ))}
         {categoryId &&
           (permissions?.includes(Permission.Admin) ||
             permissions?.includes(Permission.Product)) && (
@@ -74,6 +76,6 @@ const Home: NextPage = () => {
       </div>
     </main>
   );
-};
+}
 
 export default Home;

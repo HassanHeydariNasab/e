@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { gql, useMutation, useQuery } from "@apollo/client";
-import type { SubmitHandler } from "react-hook-form";
+import { useApolloClient, useMutation, useQuery } from "@apollo/client";
+import type { SubmitHandler, UseFormReset } from "react-hook-form";
+import { toast } from "react-hot-toast";
 
 import type {
   Category,
@@ -8,6 +10,7 @@ import type {
   MutationCreateProductGroupArgs,
   Product,
   ProductGroup,
+  QueryProductGroupsArgs,
 } from "@types";
 import {
   GET_CATEGORIES,
@@ -17,95 +20,54 @@ import {
 } from "@operations";
 import { allAttributeKeys } from "@services";
 
-import type { ProductFormSchema, ProductGroupFormSchema } from "./consts";
+import type {
+  ImagesFormSchema,
+  ProductFormSchema,
+  ProductGroupFormSchema,
+} from "./consts";
 
 interface Props {
   categoryId: string | null;
+  resetProductGroup: UseFormReset<ProductGroupFormSchema>;
 }
 
-export const useCreateProduct = ({ categoryId }: Props) => {
+export const useCreateProduct = ({ categoryId, resetProductGroup }: Props) => {
   const router = useRouter();
 
   if (categoryId === null) router.replace("/");
+
+  const apolloClient = useApolloClient();
+
+  const [images, setImages] = useState<{ preview: string; _id?: string }[]>([]);
 
   const [createProductGroup, { loading: isSubmittingProductGroup }] =
     useMutation<
       { createProductGroup: ProductGroup },
       MutationCreateProductGroupArgs
-    >(CREATE_PRODUCT_GROUP, {
-      update(cache, result) {
-        cache.modify({
-          fields: {
-            productGroups(existingProductGroups = []) {
-              const newProductGroupRef = cache.writeFragment({
-                data: result.data?.createProductGroup,
-                fragment: gql`
-                  fragment newProductGroup on ProductGroup {
-                    _id
-                    categoryId
-                    isHidden
-                    name
-                  }
-                `,
-              });
-              return [...existingProductGroups, newProductGroupRef];
-            },
-          },
-        });
-      },
-      onQueryUpdated(observableQuery) {
-        observableQuery.refetch();
-        return false;
-      },
-    });
+    >(CREATE_PRODUCT_GROUP);
 
   const [createProduct, { loading: isSubmittingProduct }] = useMutation<
     { createProduct: Product },
     MutationCreateProductArgs
   >(CREATE_PRODUCT, {
-    update(cache, result) {
-      cache.modify({
-        fields: {
-          products(existingProducts = []) {
-            const newProductRef = cache.writeFragment({
-              data: result.data?.createProduct,
-              fragment: gql`
-                fragment newProduct on Product {
-                  _id
-                  attributeValues {
-                    name
-                    value
-                  }
-                  categoryId
-                  createdAt
-                  defaultImagePath
-                  imageIds
-                  isHidden
-                  name
-                  price
-                  productGroupId
-                }
-              `,
-            });
-            return [...existingProducts, newProductRef];
-          },
-        },
-      });
+    onCompleted() {
+      router.back();
     },
-    onQueryUpdated(observableQuery) {
-      observableQuery.refetch();
-      return false;
-    },
+    refetchQueries: ["getProducts"],
   });
 
   const { data: categoriesData, loading: isLoadingCategories } = useQuery<{
     categories: Category[];
   }>(GET_CATEGORIES);
 
-  const { data: productGroupsData, loading: isLoadingProductGroups } =
-    useQuery<{
+  const { data: productGroupsData, loading: isLoadingProductGroups } = useQuery<
+    {
       productGroups: ProductGroup[];
-    }>(GET_PRODUCT_GROUPS);
+    },
+    QueryProductGroupsArgs
+  >(GET_PRODUCT_GROUPS, {
+    variables: { filter: { categoryId } },
+  });
 
   const category = categoriesData?.categories?.find(
     (category) => category._id === categoryId
@@ -116,6 +78,32 @@ export const useCreateProduct = ({ categoryId }: Props) => {
       ? allAttributeKeys(category, categoriesData.categories)
       : [];
 
+  const onSubmitImages: SubmitHandler<ImagesFormSchema> = (data, event) => {
+    const { file } = data;
+    if (!file) return;
+    const imageIndex = images.length;
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file[0]);
+    fileReader.onloadend = (event) => {
+      const dataUrl = event.target?.result;
+      if (dataUrl) {
+        setImages((images) => [...images, { preview: dataUrl as string }]);
+      }
+    };
+    const formData = new FormData();
+    formData.append("file", file[0]);
+
+    fetch("/api/files", { method: "POST", body: formData })
+      .then((response) => response.json())
+      .then((j) => {
+        setImages((_images) => {
+          const images = [..._images];
+          images[imageIndex] = { ...images[imageIndex], _id: j._id };
+          return images;
+        });
+      });
+  };
+
   const onSubmitProductGroup: SubmitHandler<ProductGroupFormSchema> = (
     data,
     event
@@ -125,14 +113,48 @@ export const useCreateProduct = ({ categoryId }: Props) => {
       variables: {
         input: { name, categoryId },
       } as MutationCreateProductGroupArgs,
+    }).then((result) => {
+      resetProductGroup();
+      const newProductGroup = result.data?.createProductGroup;
+      if (!newProductGroup) {
+        return;
+      }
+      apolloClient.cache.updateQuery<
+        { productGroups: ProductGroup[] },
+        QueryProductGroupsArgs
+      >(
+        {
+          query: GET_PRODUCT_GROUPS,
+          variables: { filter: { categoryId } },
+        },
+        (data) => {
+          if (!data) return;
+          const updatedProductGroups = [newProductGroup, ...data.productGroups];
+          return {
+            productGroups: updatedProductGroups,
+          };
+        }
+      );
     });
   };
 
   const onSubmitProduct: SubmitHandler<ProductFormSchema> = (data, event) => {
-    const { attributeValues, name, productGroupId } = data;
+    const { attributeValues, name, productGroupId, price } = data;
+    if (images.length === 0 || !images[0]._id) {
+      toast.error("Select at least one image.");
+      return;
+    }
     createProduct({
       variables: {
-        input: { attributeValues, name, categoryId, productGroupId },
+        input: {
+          attributeValues,
+          categoryId,
+          defaultImageId: images[0]._id,
+          imageIds: images.map((image) => image._id),
+          name,
+          price,
+          productGroupId,
+        },
       } as MutationCreateProductArgs,
     });
   };
@@ -143,8 +165,10 @@ export const useCreateProduct = ({ categoryId }: Props) => {
     isLoadingCategories,
     isSubmittingProductGroup,
     productGroups: productGroupsData?.productGroups || [],
+    images,
     isLoadingProductGroups,
     isSubmittingProduct,
+    onSubmitImages,
     onSubmitProductGroup,
     onSubmitProduct,
   };

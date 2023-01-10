@@ -1,7 +1,7 @@
 import { useQuery, useReactiveVar } from "@apollo/client";
 
-import { GET_CATEGORIES, GET_ME } from "@operations";
-import type { Category, User } from "@types";
+import { GET_CATEGORIES, GET_ME, GET_PRODUCTS } from "@operations";
+import type { Category, Product, QueryProductsArgs, User } from "@types";
 
 import { tokenVar } from "./ContextProviders";
 
@@ -15,6 +15,13 @@ export const useHome = ({ categoryId }: Props) => {
   const { data: categoriesData, loading: isLoadingCategories } = useQuery<{
     categories: Category[];
   }>(GET_CATEGORIES);
+
+  const { data: productsData, loading: isLoadingProducts } = useQuery<
+    {
+      products: Product[];
+    },
+    QueryProductsArgs
+  >(GET_PRODUCTS, { variables: { filter: { categoryId } } });
 
   const { data: userData } = useQuery<{ me: User }>(GET_ME, {
     skip: token === null,
@@ -36,6 +43,7 @@ export const useHome = ({ categoryId }: Props) => {
         (category) => category.parentId === categoryId
       ) || [],
     isLoadingCategories,
+    products: productsData?.products || [],
     permissions: userData?.me.permissions,
   };
 };

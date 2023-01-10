@@ -5,11 +5,11 @@ import { Product } from "@types";
 import styles from "./styles.module.scss";
 
 interface Props {
-  product?: Product;
+  product: Product;
 }
 
 const ProductCard: FC<Props> = ({ product }) => {
-  return <div className={styles["container"]}>ProductCard</div>;
+  return <div className={styles["container"]}>{product.name}</div>;
 };
 
 export default ProductCard;

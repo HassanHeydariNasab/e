@@ -1,5 +1,6 @@
 export * from "./Input";
 export * from "./Select";
+export * from "./FileInput";
 export * from "./Button";
 export * from "./Navbar";
 export * from "./MyLink";
