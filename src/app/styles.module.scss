@@ -34,8 +34,8 @@
   gap: 16px;
   padding: 32px;
   & > * {
-    flex: 150px 1 1;
-    max-width: 300px;
+    flex: 1;
+    max-width: fit-content;
     &:first-child {
       margin-left: 32px;
     }

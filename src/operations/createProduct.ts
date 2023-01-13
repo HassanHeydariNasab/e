@@ -10,7 +10,7 @@ export const CREATE_PRODUCT = gql`
       }
       categoryId
       createdAt
-      defaultImagePath
+      defaultImageId
       imageIds
       isHidden
       name

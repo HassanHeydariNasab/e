@@ -13,8 +13,6 @@ export const products: QueryResolvers["products"] = async (
   if (!filter) filter = {};
   if (!options) options = {};
 
-  console.log({ filter, options });
-
   const modifiedFilter: Filter<Omit<Product, "_id">> = {
     ...(filter.categoryId && { categoryId: filter.categoryId }),
     ...(filter.productGroupId && { productGroupId: filter.productGroupId }),

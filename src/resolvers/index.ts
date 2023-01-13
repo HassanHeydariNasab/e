@@ -8,8 +8,10 @@ import {
   createCategory,
   createProductGroup,
   createProduct,
+  addToCart,
 } from "./mutations";
-import { me, categories, productGroups, products } from "./queries";
+import { me, categories, productGroups, products, cart } from "./queries";
+import { orderItemResolvers, orderResolvers } from "./types";
 
 export const resolvers: Resolvers = {
   ObjectId: GraphQLObjectId,
@@ -20,6 +22,7 @@ export const resolvers: Resolvers = {
     categories,
     productGroups,
     products,
+    cart,
   },
   Mutation: {
     sendVerificationCode,
@@ -27,5 +30,8 @@ export const resolvers: Resolvers = {
     createCategory,
     createProductGroup,
     createProduct,
+    addToCart,
   },
+  Order: orderResolvers,
+  OrderItem: orderItemResolvers,
 };

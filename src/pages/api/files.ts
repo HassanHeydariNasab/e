@@ -33,7 +33,7 @@ const fileUpload: NextApiHandler = async (req, res) => {
     });
 
     if (files?.length) {
-      const targetPath = path.join(process.cwd(), "src", "public", "upload");
+      const targetPath = path.join(process.cwd(), "public", "upload");
       try {
         await fs.access(targetPath);
       } catch (e) {

@@ -1,0 +1,12 @@
+@use "../../styles/colors.scss" as c;
+
+.container {
+  display: flex;
+  gap: 1rem;
+  &__quantity-input {
+    flex: 1;
+  }
+  &__add-to-cart {
+    flex: 1;
+  }
+}

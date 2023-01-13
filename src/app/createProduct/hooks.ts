@@ -50,10 +50,12 @@ export const useCreateProduct = ({ categoryId, resetProductGroup }: Props) => {
     { createProduct: Product },
     MutationCreateProductArgs
   >(CREATE_PRODUCT, {
+    update(cache) {
+      cache.evict({ fieldName: "products" });
+    },
     onCompleted() {
       router.back();
     },
-    refetchQueries: ["getProducts"],
   });
 
   const { data: categoriesData, loading: isLoadingCategories } = useQuery<{
@@ -128,13 +130,16 @@ export const useCreateProduct = ({ categoryId, resetProductGroup }: Props) => {
           variables: { filter: { categoryId } },
         },
         (data) => {
-          if (!data) return;
-          const updatedProductGroups = [newProductGroup, ...data.productGroups];
+          const updatedProductGroups = [
+            newProductGroup,
+            ...(data?.productGroups || []),
+          ];
           return {
             productGroups: updatedProductGroups,
           };
         }
       );
+      toast.success("Product group created.");
     });
   };
 

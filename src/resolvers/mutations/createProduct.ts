@@ -2,8 +2,7 @@ import { GraphQLError } from "graphql";
 
 import { Permission } from "@types";
 import type { MutationResolvers } from "@types";
-import { ImagesCollection, ProductsCollection } from "@models";
-import { imagePath } from "@services";
+import { ProductsCollection } from "@models";
 
 export const createProduct: MutationResolvers["createProduct"] = async (
   _,
@@ -36,17 +35,10 @@ export const createProduct: MutationResolvers["createProduct"] = async (
     throw new GraphQLError("Product with this name already exists.");
   }
 
-  const defaultImage = await ImagesCollection.findOne({
-    _id: defaultImageId,
-  });
-  if (defaultImage === null) {
-    throw new GraphQLError("Default image doesn't exist.");
-  }
-
   const { insertedId } = await ProductsCollection.insertOne({
     attributeValues,
     createdAt: new Date(),
-    defaultImagePath: imagePath(defaultImage._id),
+    defaultImageId,
     imageIds,
     name,
     categoryId,

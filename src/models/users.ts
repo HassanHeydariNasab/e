@@ -1,4 +1,4 @@
 import { db } from "@db";
-import type { User } from "@types";
+import type { UserModel } from "@types";
 
-export const UsersCollection = db.collection<Omit<User, "_id">>("users");
+export const UsersCollection = db.collection<Omit<UserModel, "_id">>("users");

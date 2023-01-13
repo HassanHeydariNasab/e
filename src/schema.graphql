@@ -11,6 +11,7 @@ type Query {
     options: ProductGroupsOptions
   ): [ProductGroup!]!
   products(filter: ProductsFilter, options: ProductsOptions): [Product!]!
+  cart: Order!
 }
 
 type Mutation {
@@ -23,6 +24,7 @@ type Mutation {
   createCategory(input: CreateCategoryInput!): Category!
   createProductGroup(input: CreateProductGroupInput!): ProductGroup!
   createProduct(input: CreateProductInput!): Product!
+  addToCart(input: AddToCartInput!): Order!
 }
 
 input SendVerificationCodeInput {
@@ -103,18 +105,33 @@ input ProductGroupsSort {
   name: Int
 }
 
+input AddToCartInput {
+  productId: ObjectId!
+  quantity: Int!
+}
+
 enum Permission {
   ADMIN
   PRODUCT
   ACCOUNTING
 }
 
-type User {
+interface UserModel {
   _id: ObjectId!
   name: String
   phoneNumber: String!
   balance: Float!
   permissions: [Permission!]
+  currency: String!
+}
+
+type User implements UserModel {
+  _id: ObjectId!
+  name: String
+  phoneNumber: String!
+  balance: Float!
+  permissions: [Permission!]
+  currency: String!
 }
 
 type VerificationCode {
@@ -154,20 +171,126 @@ type ProductGroup {
   isHidden: Boolean
 }
 
-type Product {
+interface ProductModel {
   _id: ObjectId!
+  attributeValues: [AttributeValue!]!
   categoryId: ObjectId!
-  productGroupId: ObjectId!
+  createdAt: Date
+  defaultImageId: ObjectId!
+  imageIds: [ObjectId!]!
+  isHidden: Boolean
   name: String!
   price: Float!
-  imageIds: [ObjectId!]!
-  defaultImagePath: String!
+  productGroupId: ObjectId!
+  quantity: Int!
+}
+
+type Product implements ProductModel {
+  _id: ObjectId!
   attributeValues: [AttributeValue!]!
+  categoryId: ObjectId!
   createdAt: Date
+  defaultImageId: ObjectId!
+  imageIds: [ObjectId!]!
   isHidden: Boolean
+  name: String!
+  price: Float!
+  productGroupId: ObjectId!
+  quantity: Int!
 }
 
 type Image {
   _id: ObjectId!
   name: String
+}
+
+type ShippingMethod {
+  _id: ObjectId!
+  name: String!
+}
+
+enum OrderStatus {
+  DRAFT
+  PLACED
+  SHIPPING
+  DELIVERED
+  CANCELED
+}
+
+interface OrderShippingModel {
+  _id: ObjectId!
+  deliveredAt: Date
+  dimension: String
+  price: Float!
+  shippedAt: Date
+  shippingMethodId: ObjectId!
+  shippingMethodSnapshot: ShippingMethod!
+  weight: String
+}
+
+type OrderShipping implements OrderShippingModel {
+  _id: ObjectId!
+  deliveredAt: Date
+  dimension: String
+  price: Float!
+  shippedAt: Date
+  shippingMethodId: ObjectId!
+  shippingMethod: ShippingMethod!
+  shippingMethodSnapshot: ShippingMethod!
+  weight: String
+}
+
+interface OrderItemModel {
+  _id: ObjectId!
+  productId: ObjectId!
+  productSnapshot: Product!
+  quantity: Int!
+  orderId: ObjectId!
+}
+
+type OrderItem implements OrderItemModel {
+  _id: ObjectId!
+  productId: ObjectId!
+  product: Product
+  productSnapshot: Product!
+  quantity: Int!
+  orderId: ObjectId!
+}
+
+interface OrderModel {
+  _id: ObjectId!
+  orderShippingId: ObjectId
+  userId: ObjectId!
+  placedAt: Date
+  price: Float!
+  status: OrderStatus!
+}
+
+type Order implements OrderModel {
+  _id: ObjectId!
+  orderShippingId: ObjectId
+  orderShipping: OrderShipping
+  userId: ObjectId!
+  user: User
+  placedAt: Date
+  price: Float!
+  status: OrderStatus!
+  orderItems: [OrderItem!]!
+}
+
+type PaymentMethod {
+  _id: ObjectId!
+  name: String!
+}
+
+type Invoice {
+  _id: ObjectId!
+  createdAt: Date!
+  orderId: ObjectId!
+  paid: Int
+  paidAt: Date
+  paymentMethodId: ObjectId
+  paymentMethod: PaymentMethod
+  paymentMethodSnapshot: PaymentMethod
+  price: Float!
 }

@@ -33,18 +33,15 @@ export function childrenCategories(
   categoryId: ObjectId,
   categories: Category[]
 ) {
-  console.log({ categoryId });
   const selectedCategories: Category["_id"][] = [categoryId];
   const children = categories.filter((category) =>
     (category.parentId as ObjectId)?.equals(categoryId)
   );
-  console.log({ children });
   if (children.length === 0) {
     return selectedCategories;
   }
   for (let child of children) {
     selectedCategories.push(...childrenCategories(child._id, categories));
   }
-  console.log({ selectedCategories });
   return selectedCategories;
 }

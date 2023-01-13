@@ -12,8 +12,6 @@ export const productGroups: QueryResolvers["productGroups"] = async (
   if (!filter) filter = {};
   if (!options) options = {};
 
-  console.log({ filter, options });
-
   const modifiedFilter: Filter<Omit<ProductGroup, "_id">> = {
     ...(filter.categoryId && { categoryId: filter.categoryId }),
     ...(filter.isHidden

@@ -21,6 +21,7 @@ const Button: FC<PropsWithChildren<Props>> = ({
   children,
   isLoading,
   variant = "filled",
+  className,
   ...rest
 }) => {
   return (
@@ -28,7 +29,8 @@ const Button: FC<PropsWithChildren<Props>> = ({
       className={clsx(
         styles["button"],
         styles[variant],
-        isLoading && styles["button--loading"]
+        isLoading && styles["button--loading"],
+        className
       )}
       disabled={isLoading}
       {...rest}

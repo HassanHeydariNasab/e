@@ -1,6 +1,7 @@
 export * from "./Input";
 export * from "./Select";
 export * from "./FileInput";
+export * from "./QuantityInput";
 export * from "./Button";
 export * from "./Navbar";
 export * from "./MyLink";
@@ -8,3 +9,4 @@ export * from "./ProductCard";
 export * from "./AddProductCard";
 export * from "./CategoryCard";
 export * from "./AddCategoryCard";
+export * from "./AddToCart";

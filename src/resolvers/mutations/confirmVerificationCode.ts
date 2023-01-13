@@ -4,7 +4,7 @@ import { sign } from "jsonwebtoken";
 
 import { db } from "@db";
 import { Permission } from "@types";
-import type { MutationResolvers, User } from "@types";
+import type { MutationResolvers, UserModel } from "@types";
 import { UsersCollection } from "@models";
 import type { TokenPayload } from "@resolvers/context";
 
@@ -25,9 +25,10 @@ export const confirmVerificationCode: MutationResolvers["confirmVerificationCode
     let permissions: Permission[] | undefined;
     if (user === null) {
       const usersCount = await UsersCollection.countDocuments();
-      const newUser: Omit<User, "_id"> = {
+      const newUser: Omit<UserModel, "_id"> = {
         phoneNumber,
         balance: 0,
+        currency: "USD",
       };
       if (usersCount === 0) {
         newUser.permissions = [Permission.Admin];

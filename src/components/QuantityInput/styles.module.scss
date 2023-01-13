@@ -1,0 +1,27 @@
+@use "../../styles/colors.scss" as c;
+@use "../../styles/variables.scss" as v;
+
+.container {
+  background-color: c.$secondary;
+  border: 2px solid c.$transparent-dark-secondary;
+  border-radius: v.$input-border-radius;
+
+  &__input-container {
+    height: 100%;
+    display: flex;
+    input {
+      flex: 1;
+      height: 100%;
+      background: unset;
+      border: unset;
+      border-bottom-left-radius: v.$input-border-radius;
+      border-bottom-right-radius: v.$input-border-radius;
+      padding: v.$input-padding;
+      width: 100%;
+      font-size: medium;
+      color: c.$dark-secondary;
+      font-weight: 700;
+      outline-color: c.$primary;
+    }
+  }
+}

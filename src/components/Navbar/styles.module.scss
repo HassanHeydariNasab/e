@@ -3,4 +3,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px;
+
+  &__right {
+    display: flex;
+    gap: 1rem;
+  }
 }

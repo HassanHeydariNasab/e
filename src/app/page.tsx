@@ -55,24 +55,24 @@ function Home() {
             </span>
           </div>
         )}
+        {permissions?.includes(Permission.Admin) && (
+          <AddCategoryCard parentId={categoryId} />
+        )}
         {subcategories
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((subcategory) => (
             <CategoryCard category={subcategory} key={subcategory._id} />
           ))}
-        {permissions?.includes(Permission.Admin) && (
-          <AddCategoryCard parentId={categoryId} />
-        )}
       </div>
       <div className={styles["products"]}>
-        {products.map((product) => (
-          <ProductCard product={product} key={product._id} />
-        ))}
         {categoryId &&
           (permissions?.includes(Permission.Admin) ||
             permissions?.includes(Permission.Product)) && (
             <AddProductCard categoryId={categoryId} />
           )}
+        {products.map((product) => (
+          <ProductCard product={product} key={product._id} />
+        ))}
       </div>
     </main>
   );
