@@ -18,6 +18,7 @@ const AddToCart: FC<Props> = ({ product }) => {
   const {
     orderItem,
     isAddingToCart,
+    isRemovingFromCart,
     onClickAddToCart,
     onClickRemoveFromCart,
     onClickIncreaseQuantity,
@@ -41,6 +42,7 @@ const AddToCart: FC<Props> = ({ product }) => {
           variant="filled"
           className={clsx(styles["container__remove-from-cart"])}
           onClick={onClickRemoveFromCart}
+          isLoading={isRemovingFromCart}
         >
           <IoTrash size={"1.5rem"} />
         </Button>

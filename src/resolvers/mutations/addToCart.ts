@@ -7,7 +7,7 @@ import {
   OrderItemsCollection,
   ProductsCollection,
 } from "@models";
-import { updateDraftOrder } from "services/order";
+import { updateDraftOrder } from "@services/server/order";
 
 export const addToCart: MutationResolvers["addToCart"] = async (
   _,
@@ -68,7 +68,7 @@ export const addToCart: MutationResolvers["addToCart"] = async (
     orderItemId = insertedId;
   }
 
-  updateDraftOrder(orderId);
+  await updateDraftOrder(orderId);
 
   const updatedOrder = await OrdersCollection.findOne({ _id: orderId });
 

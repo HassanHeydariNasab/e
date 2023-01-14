@@ -110,6 +110,7 @@ export type Mutation = {
   createCategory: Category;
   createProduct: Product;
   createProductGroup: ProductGroup;
+  removeFromCart: Order;
   sendVerificationCode?: Maybe<Scalars['Boolean']>;
 };
 
@@ -136,6 +137,11 @@ export type MutationCreateProductArgs = {
 
 export type MutationCreateProductGroupArgs = {
   input: CreateProductGroupInput;
+};
+
+
+export type MutationRemoveFromCartArgs = {
+  input: RemoveFromCartInput;
 };
 
 
@@ -327,6 +333,10 @@ export type QueryUserArgs = {
   UserInput: UserInput;
 };
 
+export type RemoveFromCartInput = {
+  orderItemId: Scalars['ObjectId'];
+};
+
 export type SendVerificationCodeInput = {
   phoneNumber: Scalars['String'];
 };
@@ -475,6 +485,7 @@ export type ResolversTypes = ResolversObject<{
   ProductsOptions: ProductsOptions;
   ProductsSort: ProductsSort;
   Query: ResolverTypeWrapper<{}>;
+  RemoveFromCartInput: RemoveFromCartInput;
   SendVerificationCodeInput: SendVerificationCodeInput;
   ShippingMethod: ResolverTypeWrapper<ShippingMethod>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -521,6 +532,7 @@ export type ResolversParentTypes = ResolversObject<{
   ProductsOptions: ProductsOptions;
   ProductsSort: ProductsSort;
   Query: {};
+  RemoveFromCartInput: RemoveFromCartInput;
   SendVerificationCodeInput: SendVerificationCodeInput;
   ShippingMethod: ShippingMethod;
   String: Scalars['String'];
@@ -580,6 +592,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'input'>>;
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'input'>>;
   createProductGroup?: Resolver<ResolversTypes['ProductGroup'], ParentType, ContextType, RequireFields<MutationCreateProductGroupArgs, 'input'>>;
+  removeFromCart?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationRemoveFromCartArgs, 'input'>>;
   sendVerificationCode?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSendVerificationCodeArgs, 'SendVerificationCodeInput'>>;
 }>;
 

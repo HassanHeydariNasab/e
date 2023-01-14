@@ -18,7 +18,7 @@ import {
   GET_PRODUCT_GROUPS,
   CREATE_PRODUCT,
 } from "@operations";
-import { allAttributeKeys } from "@services";
+import { allAttributeKeys } from "@services/client/category";
 
 import type {
   ImagesFormSchema,

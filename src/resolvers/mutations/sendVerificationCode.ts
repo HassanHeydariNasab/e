@@ -1,9 +1,9 @@
 import { randomInt } from "crypto";
+import { GraphQLError } from "graphql";
 
 import { db } from "@db";
-import { sendVerificationCodeViaSMS } from "@services";
+import { sendVerificationCodeViaSMS } from "@services/server/sms";
 import type { MutationResolvers } from "@types";
-import { GraphQLError } from "graphql";
 
 export const sendVerificationCode: MutationResolvers["sendVerificationCode"] =
   async (_, { SendVerificationCodeInput: { phoneNumber } }) => {

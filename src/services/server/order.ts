@@ -4,9 +4,9 @@ import {
   OrderItemsCollection,
   OrdersCollection,
   ProductsCollection,
+  OrderShippingsCollection,
 } from "@models";
 import { OrderStatus } from "@types";
-import { OrderShippingsCollection } from "models/orderShippings";
 
 export async function updateDraftOrder(orderId: ObjectId) {
   const order = await OrdersCollection.findOne({

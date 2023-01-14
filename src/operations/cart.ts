@@ -32,6 +32,15 @@ const cart = gql`
   }
 `;
 
+export const GET_CART = gql`
+  ${cart}
+  query getCart {
+    cart {
+      ...Cart
+    }
+  }
+`;
+
 export const ADD_TO_CART = gql`
   ${cart}
   mutation addToCart($input: AddToCartInput!) {
@@ -41,10 +50,10 @@ export const ADD_TO_CART = gql`
   }
 `;
 
-export const GET_CART = gql`
+export const REMOVE_FROM_CART = gql`
   ${cart}
-  query getCart {
-    cart {
+  mutation removeFromCart($input: RemoveFromCartInput!) {
+    removeFromCart(input: $input) {
       ...Cart
     }
   }

@@ -22,7 +22,7 @@
     "baseUrl": "./src",
     "paths": {
       "@components": ["components"],
-      "@services": ["services"],
+      "@services/*": ["services/*"],
       "@operations": ["operations"],
       "@styles/*": ["styles/*"],
       "@db": ["db"],

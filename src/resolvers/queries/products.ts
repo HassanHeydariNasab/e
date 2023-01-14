@@ -3,7 +3,7 @@ import type { Filter, FindOptions } from "mongodb";
 import { Permission, Product } from "@types";
 import type { QueryResolvers } from "@types";
 import { CategoriesCollection, ProductsCollection } from "@models";
-import { childrenCategories } from "@services";
+import { childrenCategories } from "@services/server/category";
 
 export const products: QueryResolvers["products"] = async (
   _,

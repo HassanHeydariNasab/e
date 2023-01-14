@@ -4,7 +4,7 @@ import type { FC } from "react";
 import Image from "next/image";
 
 import type { Product } from "@types";
-import { imagePath } from "@services";
+import { imagePath } from "@services/client/file";
 import { AddToCart } from "@components";
 
 import styles from "./styles.module.scss";

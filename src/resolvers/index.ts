@@ -9,6 +9,7 @@ import {
   createProductGroup,
   createProduct,
   addToCart,
+  removeFromCart,
 } from "./mutations";
 import { me, categories, productGroups, products, cart } from "./queries";
 import { orderItemResolvers, orderResolvers } from "./types";
@@ -31,6 +32,7 @@ export const resolvers: Resolvers = {
     createProductGroup,
     createProduct,
     addToCart,
+    removeFromCart,
   },
   Order: orderResolvers,
   OrderItem: orderItemResolvers,
