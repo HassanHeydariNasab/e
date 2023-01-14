@@ -1,11 +1,17 @@
 import type { MouseEventHandler } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { toast } from "react-hot-toast";
 
-import { ADD_TO_CART, GET_CART, REMOVE_FROM_CART } from "@operations";
+import {
+  ADD_TO_CART,
+  GET_CART,
+  REMOVE_FROM_CART,
+  UPDATE_ORDER_ITEM_QUANTITY,
+} from "@operations";
 import type {
   MutationAddToCartArgs,
   MutationRemoveFromCartArgs,
+  MutationUpdateOrderItemQuantityArgs,
   Order,
 } from "@types";
 
@@ -24,6 +30,12 @@ export const useAddToCart = ({ productId }: Props) => {
     MutationRemoveFromCartArgs
   >(REMOVE_FROM_CART, { refetchQueries: [{ query: GET_CART }] });
 
+  const [updateOrderItemQuantity, { loading: isUpdatinOrderItemQuantity }] =
+    useMutation<
+      { updateOrderItemQuantity: Order },
+      MutationUpdateOrderItemQuantityArgs
+    >(UPDATE_ORDER_ITEM_QUANTITY, { refetchQueries: [{ query: GET_CART }] });
+
   const { data: cartData } = useQuery<{ cart: Order }>(GET_CART);
 
   const orderItem = cartData?.cart.orderItems.find(
@@ -40,6 +52,8 @@ export const useAddToCart = ({ productId }: Props) => {
     );
   };
 
+  const apolloClient = useApolloClient();
+
   const onClickRemoveFromCart: MouseEventHandler = (event) => {
     if (!orderItem) return;
 
@@ -49,12 +63,18 @@ export const useAddToCart = ({ productId }: Props) => {
       const order = result.data?.removeFromCart;
       if (!order) return;
       toast.success("Product removed from cart.");
+      apolloClient.cache.gc();
     });
   };
 
-  const onClickIncreaseQuantity: MouseEventHandler = (event) => {};
-
-  const onClickDecreaseQuantity: MouseEventHandler = (event) => {};
+  const onChangeQuantity = (quantity: number) => {
+    console.log({ quantity });
+    if (orderItem) {
+      updateOrderItemQuantity({
+        variables: { input: { orderItemId: orderItem?._id, quantity } },
+      });
+    }
+  };
 
   return {
     orderItem,
@@ -62,7 +82,6 @@ export const useAddToCart = ({ productId }: Props) => {
     isRemovingFromCart,
     onClickAddToCart,
     onClickRemoveFromCart,
-    onClickIncreaseQuantity,
-    onClickDecreaseQuantity,
+    onChangeQuantity,
   };
 };

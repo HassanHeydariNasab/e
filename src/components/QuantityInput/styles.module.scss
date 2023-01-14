@@ -4,16 +4,25 @@
 .container {
   background-color: c.$secondary;
   border: 2px solid c.$transparent-dark-secondary;
-  border-radius: v.$input-border-radius;
+  border-radius: 32px;
 
   &__input-container {
     height: 100%;
     display: flex;
+    align-items: center;
+
+    &:focus-within {
+      outline: 2px solid c.$primary !important;
+      border: none !important;
+      border-radius: 32px;
+    }
+
     input {
       flex: 1;
       height: 100%;
       background: unset;
-      border: unset;
+      border: none;
+      outline: none;
       border-bottom-left-radius: v.$input-border-radius;
       border-bottom-right-radius: v.$input-border-radius;
       padding: v.$input-padding;
@@ -21,7 +30,7 @@
       font-size: medium;
       color: c.$dark-secondary;
       font-weight: 700;
-      outline-color: c.$primary;
+      text-align: center;
     }
   }
 }

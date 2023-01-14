@@ -26,6 +26,7 @@ type Mutation {
   createProduct(input: CreateProductInput!): Product!
   addToCart(input: AddToCartInput!): Order!
   removeFromCart(input: RemoveFromCartInput!): Order!
+  updateOrderItemQuantity(input: UpdateOrderItemQuantityInput!): Order!
 }
 
 input SendVerificationCodeInput {
@@ -113,6 +114,11 @@ input AddToCartInput {
 
 input RemoveFromCartInput {
   orderItemId: ObjectId!
+}
+
+input UpdateOrderItemQuantityInput {
+  orderItemId: ObjectId!
+  quantity: Int!
 }
 
 enum Permission {

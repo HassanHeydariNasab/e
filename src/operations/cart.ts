@@ -58,3 +58,12 @@ export const REMOVE_FROM_CART = gql`
     }
   }
 `;
+
+export const UPDATE_ORDER_ITEM_QUANTITY = gql`
+  ${cart}
+  mutation updateOrderItemQuantity($input: UpdateOrderItemQuantityInput!) {
+    updateOrderItemQuantity(input: $input) {
+      ...Cart
+    }
+  }
+`;

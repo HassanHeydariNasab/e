@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import { IoAddCircle, IoCart, IoRemoveCircle, IoTrash } from "react-icons/io5";
+import { IoCart, IoTrash } from "react-icons/io5";
 import clsx from "clsx";
 
 import type { Product } from "@types";
@@ -21,21 +21,18 @@ const AddToCart: FC<Props> = ({ product }) => {
     isRemovingFromCart,
     onClickAddToCart,
     onClickRemoveFromCart,
-    onClickIncreaseQuantity,
-    onClickDecreaseQuantity,
+    onChangeQuantity,
   } = useAddToCart({ productId: product._id });
 
   return (
     <div className={styles["container"]}>
       {orderItem && (
-        <form>
-          <QuantityInput
-            type="number"
-            containerClassName={styles["container__quantity-input"]}
-            Left={<IoRemoveCircle onClick={onClickDecreaseQuantity} />}
-            Right={<IoAddCircle onClick={onClickIncreaseQuantity} />}
-          />
-        </form>
+        <QuantityInput
+          name="quantity"
+          containerClassName={styles["container__quantity-input"]}
+          onChangeQuantity={onChangeQuantity}
+          defaultValue={orderItem.quantity || 1}
+        />
       )}
       {orderItem ? (
         <Button

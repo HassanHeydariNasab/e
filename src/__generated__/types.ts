@@ -112,6 +112,7 @@ export type Mutation = {
   createProductGroup: ProductGroup;
   removeFromCart: Order;
   sendVerificationCode?: Maybe<Scalars['Boolean']>;
+  updateOrderItemQuantity: Order;
 };
 
 
@@ -147,6 +148,11 @@ export type MutationRemoveFromCartArgs = {
 
 export type MutationSendVerificationCodeArgs = {
   SendVerificationCodeInput: SendVerificationCodeInput;
+};
+
+
+export type MutationUpdateOrderItemQuantityArgs = {
+  input: UpdateOrderItemQuantityInput;
 };
 
 export type Order = OrderModel & {
@@ -347,6 +353,11 @@ export type ShippingMethod = {
   name: Scalars['String'];
 };
 
+export type UpdateOrderItemQuantityInput = {
+  orderItemId: Scalars['ObjectId'];
+  quantity: Scalars['Int'];
+};
+
 export type User = UserModel & {
   __typename?: 'User';
   _id: Scalars['ObjectId'];
@@ -489,6 +500,7 @@ export type ResolversTypes = ResolversObject<{
   SendVerificationCodeInput: SendVerificationCodeInput;
   ShippingMethod: ResolverTypeWrapper<ShippingMethod>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  UpdateOrderItemQuantityInput: UpdateOrderItemQuantityInput;
   User: ResolverTypeWrapper<User>;
   UserInput: UserInput;
   UserModel: ResolversTypes['User'];
@@ -536,6 +548,7 @@ export type ResolversParentTypes = ResolversObject<{
   SendVerificationCodeInput: SendVerificationCodeInput;
   ShippingMethod: ShippingMethod;
   String: Scalars['String'];
+  UpdateOrderItemQuantityInput: UpdateOrderItemQuantityInput;
   User: User;
   UserInput: UserInput;
   UserModel: ResolversParentTypes['User'];
@@ -594,6 +607,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createProductGroup?: Resolver<ResolversTypes['ProductGroup'], ParentType, ContextType, RequireFields<MutationCreateProductGroupArgs, 'input'>>;
   removeFromCart?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationRemoveFromCartArgs, 'input'>>;
   sendVerificationCode?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSendVerificationCodeArgs, 'SendVerificationCodeInput'>>;
+  updateOrderItemQuantity?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationUpdateOrderItemQuantityArgs, 'input'>>;
 }>;
 
 export interface ObjectIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['ObjectId'], any> {
