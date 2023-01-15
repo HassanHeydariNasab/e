@@ -36,7 +36,7 @@
   & > svg {
     cursor: pointer;
     font-size: x-large;
-    transition: color 150ms ease-out;
+    @include v.transition([color]);
     &:hover {
       color: c.$primary;
     }
@@ -56,7 +56,7 @@
     align-self: flex-end;
     cursor: pointer;
     color: c.$dark-primary;
-    transition: color 150ms ease-out;
+    @include v.transition([color]);
     &:hover {
       color: c.$primary;
     }

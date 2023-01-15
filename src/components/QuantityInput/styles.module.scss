@@ -10,11 +10,19 @@
     height: 100%;
     display: flex;
     align-items: center;
+    padding: 0 8px;
 
     &:focus-within {
       outline: 2px solid c.$primary !important;
       border: none !important;
       border-radius: 32px;
+    }
+
+    & > svg {
+      @include v.transition([filter]);
+      &:hover {
+        filter: brightness(1.2);
+      }
     }
 
     input {

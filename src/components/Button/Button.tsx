@@ -14,7 +14,13 @@ interface Props
     HTMLButtonElement
   > {
   isLoading?: boolean;
-  variant?: "filled" | "outlined" | "secondary" | "transparent";
+  variant?:
+    | "filled"
+    | "outlined"
+    | "secondary"
+    | "transparent"
+    | "secondary-transparent"
+    | "secondary-outlined";
 }
 
 const Button: FC<PropsWithChildren<Props>> = ({

@@ -1,4 +1,5 @@
 @use "../../styles/colors.scss" as c;
+@use "../../styles/variables.scss" as v;
 
 .container {
   display: flex;
@@ -8,5 +9,14 @@
   }
   &__add-to-cart {
     flex: 1;
+  }
+  &__remove-from-cart {
+    border-radius: 100%;
+    padding: 18px;
+    @include v.transition([color border]);
+    &:hover {
+      color: c.$red;
+      border: 2px solid c.$red;
+    }
   }
 }

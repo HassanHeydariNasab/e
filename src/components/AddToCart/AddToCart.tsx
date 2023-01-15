@@ -36,7 +36,7 @@ const AddToCart: FC<Props> = ({ product }) => {
       )}
       {orderItem ? (
         <Button
-          variant="filled"
+          variant="secondary-outlined"
           className={clsx(styles["container__remove-from-cart"])}
           onClick={onClickRemoveFromCart}
           isLoading={isRemovingFromCart}

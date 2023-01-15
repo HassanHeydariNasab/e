@@ -1,4 +1,5 @@
 @use "../../styles/colors.scss" as c;
+@use "../../styles/variables.scss" as v;
 
 .container {
   background-color: c.$primary;
@@ -10,7 +11,7 @@
   font-size: xx-large;
   font-weight: 700;
   cursor: pointer;
-  transition: box-shadow 200ms ease-out;
+  @include v.transition([box-shadow]);
 
   &:hover {
     box-shadow: 0px 0px 32px -4px c.$primary;

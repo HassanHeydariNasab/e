@@ -1,7 +1,6 @@
 @use "../../styles/colors.scss" as c;
 
 .container {
-  aspect-ratio: 3/4;
   display: flex;
   flex-direction: column;
   border: 4px solid c.$dark-secondary;
@@ -16,6 +15,7 @@
   }
 
   &__image {
+    aspect-ratio: 1;
     position: static !important;
     object-fit: cover;
     height: 70% !important;
@@ -32,7 +32,6 @@
     border-bottom-left-radius: 32px;
     border-bottom-right-radius: 32px;
     padding: 1rem;
-    padding-bottom: 2rem;
     font-size: large;
     font-weight: 700;
     color: c.$darker-primary;

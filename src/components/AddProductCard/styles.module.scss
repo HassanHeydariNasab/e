@@ -1,7 +1,8 @@
 @use "../../styles/colors.scss" as c;
+@use "../../styles/variables.scss" as v;
 
 .container {
-  aspect-ratio: 3/4;
+  aspect-ratio: 3/5;
   border-radius: 32px;
   background-color: c.$primary;
   color: c.$dark-primary;
@@ -12,7 +13,7 @@
   font-size: 96px;
   font-weight: 700;
   cursor: pointer;
-  transition: box-shadow 200ms ease-out;
+  @include v.transition([box-shadow]);
 
   &:hover {
     box-shadow: 0px 0px 32px -4px c.$primary;

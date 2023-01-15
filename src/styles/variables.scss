@@ -1,4 +1,13 @@
 $input-border-radius: 8px;
 $input-padding: 16px;
 
-$button-padding: 18px 24px;
+$button-border-radius: 32px;
+$button-padding: 1rem 1.5rem;
+
+@mixin transition($properties: [all]) {
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+  @each $property in $properties {
+    transition-property: $property;
+  }
+}
