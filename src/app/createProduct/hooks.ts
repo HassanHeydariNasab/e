@@ -144,7 +144,7 @@ export const useCreateProduct = ({ categoryId, resetProductGroup }: Props) => {
   };
 
   const onSubmitProduct: SubmitHandler<ProductFormSchema> = (data, event) => {
-    const { attributeValues, name, productGroupId, price } = data;
+    const { attributeValues, name, productGroupId, price, quantity } = data;
     if (images.length === 0 || !images[0]._id) {
       toast.error("Select at least one image.");
       return;
@@ -159,6 +159,7 @@ export const useCreateProduct = ({ categoryId, resetProductGroup }: Props) => {
           name,
           price,
           productGroupId,
+          quantity,
         },
       } as MutationCreateProductArgs,
     });

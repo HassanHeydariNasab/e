@@ -40,8 +40,9 @@ export const updateOrderItemQuantity: MutationResolvers["updateOrderItemQuantity
       throw new GraphQLError("Product not found");
     }
 
-    if (product.quantity < quantity) {
-      throw new GraphQLError("Requested quantity is not available.");
+    if ((product.quantity || 0) < quantity) {
+      //throw new GraphQLError("Requested quantity is not available.");
+      quantity = product.quantity || 0;
     }
 
     await OrderItemsCollection.updateOne(

@@ -19,6 +19,7 @@ const AddToCart: FC<Props> = ({ product }) => {
     orderItem,
     isAddingToCart,
     isRemovingFromCart,
+    isUpdatinOrderItemQuantity,
     onClickAddToCart,
     onClickRemoveFromCart,
     onChangeQuantity,
@@ -31,7 +32,8 @@ const AddToCart: FC<Props> = ({ product }) => {
           name="quantity"
           containerClassName={styles["container__quantity-input"]}
           onChangeQuantity={onChangeQuantity}
-          defaultValue={orderItem.quantity || 1}
+          value={orderItem.quantity || 1}
+          isUpdating={isUpdatinOrderItemQuantity}
         />
       )}
       {orderItem ? (

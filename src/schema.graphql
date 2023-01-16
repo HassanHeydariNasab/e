@@ -66,6 +66,7 @@ input CreateProductInput {
   name: String!
   price: Float!
   productGroupId: ObjectId!
+  quantity: Int!
 }
 
 input AttributeValueInput {
@@ -193,7 +194,7 @@ interface ProductModel {
   name: String!
   price: Float!
   productGroupId: ObjectId!
-  quantity: Int!
+  quantity: Int
 }
 
 type Product implements ProductModel {
@@ -207,7 +208,7 @@ type Product implements ProductModel {
   name: String!
   price: Float!
   productGroupId: ObjectId!
-  quantity: Int!
+  quantity: Int
 }
 
 type Image {

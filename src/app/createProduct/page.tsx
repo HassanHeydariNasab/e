@@ -42,7 +42,7 @@ function CreateProductPage() {
     handleSubmit: handleSubmitProduct,
   } = useForm<ProductFormSchema>({
     resolver: yupResolver(productFormSchema),
-    defaultValues: { price: 0 },
+    defaultValues: { price: 0, quantity: 1 },
   });
 
   const {
@@ -131,6 +131,13 @@ function CreateProductPage() {
             type="number"
             error={errorsProduct?.price?.message}
             label="Price"
+            required
+          />
+          <Input
+            {...registerProduct("quantity")}
+            type="number"
+            error={errorsProduct?.quantity?.message}
+            label="Quantity"
             required
           />
           {attributeKeys.map((attributeKey, index) => (

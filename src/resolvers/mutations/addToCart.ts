@@ -49,7 +49,7 @@ export const addToCart: MutationResolvers["addToCart"] = async (
   const orderItem = await OrderItemsCollection.findOne({ orderId, productId });
   let orderItemId = orderItem?._id;
 
-  if (product.quantity < quantity + (orderItem?.quantity || 0)) {
+  if ((product.quantity || 0) < quantity + (orderItem?.quantity || 0)) {
     throw new GraphQLError("Requested quantity is not available.");
   }
 

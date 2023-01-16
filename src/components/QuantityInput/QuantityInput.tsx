@@ -13,26 +13,35 @@ interface Props
     HTMLInputElement
   > {
   containerClassName?: string;
+  isUpdating?: boolean;
   onChangeQuantity: (quantity: number) => void;
 }
 
 const QuantityInput: FC<Props> = ({
   containerClassName,
+  isUpdating,
   onChangeQuantity,
   ...rest
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
+
   return (
     <div
-      className={clsx(styles["container"], containerClassName)}
+      className={clsx(
+        styles["container"],
+        containerClassName,
+        isUpdating && styles["container--updating"]
+      )}
       hidden={rest.hidden}
     >
       <div className={styles["container__input-container"]}>
         <IoRemoveCircle
           onClick={() => {
-            inputRef.current?.stepDown(1);
             const value = inputRef.current?.valueAsNumber || 1;
-            onChangeQuantity(value);
+            const newValue = value - 1;
+            if (newValue >= 1) {
+              onChangeQuantity(newValue);
+            }
           }}
           size={32}
         />
@@ -45,14 +54,17 @@ const QuantityInput: FC<Props> = ({
           min={1}
           step={1}
           onChange={(event) => {
-            onChangeQuantity(event.target.valueAsNumber);
+            const newValue = event.target.valueAsNumber || 1;
+            if (newValue >= 1) {
+              onChangeQuantity(newValue);
+            }
+            onChangeQuantity(newValue);
           }}
         />
         <IoAddCircle
           onClick={() => {
-            inputRef.current?.stepUp(1);
             const value = inputRef.current?.valueAsNumber || 1;
-            onChangeQuantity(value);
+            onChangeQuantity(value + 1);
           }}
           size={32}
         />

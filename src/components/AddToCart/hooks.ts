@@ -20,6 +20,8 @@ interface Props {
 }
 
 export const useAddToCart = ({ productId }: Props) => {
+  const { cache } = useApolloClient();
+
   const [addToCart, { loading: isAddingToCart }] = useMutation<
     { addToCart: Order },
     MutationAddToCartArgs
@@ -34,7 +36,28 @@ export const useAddToCart = ({ productId }: Props) => {
     useMutation<
       { updateOrderItemQuantity: Order },
       MutationUpdateOrderItemQuantityArgs
-    >(UPDATE_ORDER_ITEM_QUANTITY, { refetchQueries: [{ query: GET_CART }] });
+    >(UPDATE_ORDER_ITEM_QUANTITY, {
+      refetchQueries: [{ query: GET_CART }],
+      optimisticResponse({ input: { orderItemId, quantity } }) {
+        const cart = cache.readQuery<{ cart: Order }>({
+          query: GET_CART,
+        })?.cart;
+        if (!cart) return { updateOrderItemQuantity: {} as Order };
+        const optimisticCart = { ...cart };
+        const optimisticOrderItems = [...optimisticCart.orderItems];
+        const toBeChangedOrderItemIndex = optimisticOrderItems.findIndex(
+          (orderItem) => orderItem._id === orderItemId
+        );
+        if (toBeChangedOrderItemIndex === -1)
+          return { updateOrderItemQuantity: cart };
+        optimisticOrderItems[toBeChangedOrderItemIndex] = {
+          ...optimisticOrderItems[toBeChangedOrderItemIndex],
+          quantity,
+        };
+        optimisticCart.orderItems = optimisticOrderItems;
+        return { updateOrderItemQuantity: optimisticCart };
+      },
+    });
 
   const { data: cartData } = useQuery<{ cart: Order }>(GET_CART);
 
@@ -52,8 +75,6 @@ export const useAddToCart = ({ productId }: Props) => {
     );
   };
 
-  const apolloClient = useApolloClient();
-
   const onClickRemoveFromCart: MouseEventHandler = (event) => {
     if (!orderItem) return;
 
@@ -63,23 +84,22 @@ export const useAddToCart = ({ productId }: Props) => {
       const order = result.data?.removeFromCart;
       if (!order) return;
       toast.success("Product removed from cart.");
-      apolloClient.cache.gc();
+      cache.gc();
     });
   };
 
   const onChangeQuantity = (quantity: number) => {
-    console.log({ quantity });
-    if (orderItem) {
-      updateOrderItemQuantity({
-        variables: { input: { orderItemId: orderItem?._id, quantity } },
-      });
-    }
+    if (!orderItem) return;
+    updateOrderItemQuantity({
+      variables: { input: { orderItemId: orderItem._id, quantity } },
+    });
   };
 
   return {
     orderItem,
     isAddingToCart,
     isRemovingFromCart,
+    isUpdatinOrderItemQuantity,
     onClickAddToCart,
     onClickRemoveFromCart,
     onChangeQuantity,

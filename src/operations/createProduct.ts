@@ -16,6 +16,7 @@ export const CREATE_PRODUCT = gql`
       name
       price
       productGroupId
+      quantity
     }
   }
 `;

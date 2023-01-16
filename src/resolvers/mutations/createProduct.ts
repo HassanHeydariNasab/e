@@ -15,6 +15,7 @@ export const createProduct: MutationResolvers["createProduct"] = async (
       attributeValues,
       imageIds,
       defaultImageId,
+      quantity,
     },
   },
   { permissions }
@@ -44,6 +45,7 @@ export const createProduct: MutationResolvers["createProduct"] = async (
     categoryId,
     price,
     productGroupId,
+    quantity,
   });
   const product = await ProductsCollection.findOne({
     _id: insertedId,

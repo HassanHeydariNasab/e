@@ -6,6 +6,10 @@
   border: 2px solid c.$transparent-dark-secondary;
   border-radius: 32px;
 
+  &--updating {
+    @include v.stale-animation;
+  }
+
   &__input-container {
     height: 100%;
     display: flex;

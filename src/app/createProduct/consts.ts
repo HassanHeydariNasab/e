@@ -22,6 +22,10 @@ export const productFormSchema = yup.object({
     .number()
     .min(0, "Price could not be negative.")
     .typeError("Price is required."),
+  quantity: yup
+    .number()
+    .positive("Quantity could not be negative.")
+    .typeError("Quantity is required."),
   productGroupId: yup.string().min(24, "Product group is required"),
 });
 

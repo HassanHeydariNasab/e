@@ -1,5 +1,5 @@
 $input-border-radius: 8px;
-$input-padding: 16px;
+$input-padding: 1rem;
 
 $button-border-radius: 32px;
 $button-padding: 1rem 1.5rem;
@@ -9,5 +9,21 @@ $button-padding: 1rem 1.5rem;
   transition-timing-function: ease-out;
   @each $property in $properties {
     transition-property: $property;
+  }
+}
+
+@mixin stale-animation {
+  animation: stale-beating 800ms ease-in infinite none;
+}
+
+@keyframes stale-beating {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.8;
   }
 }

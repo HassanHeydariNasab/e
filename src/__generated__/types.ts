@@ -82,6 +82,7 @@ export type CreateProductInput = {
   name: Scalars['String'];
   price: Scalars['Float'];
   productGroupId: Scalars['ObjectId'];
+  quantity: Scalars['Int'];
 };
 
 export type Image = {
@@ -251,7 +252,7 @@ export type Product = ProductModel & {
   name: Scalars['String'];
   price: Scalars['Float'];
   productGroupId: Scalars['ObjectId'];
-  quantity: Scalars['Int'];
+  quantity?: Maybe<Scalars['Int']>;
 };
 
 export type ProductGroup = {
@@ -290,7 +291,7 @@ export type ProductModel = {
   name: Scalars['String'];
   price: Scalars['Float'];
   productGroupId: Scalars['ObjectId'];
-  quantity: Scalars['Int'];
+  quantity?: Maybe<Scalars['Int']>;
 };
 
 export type ProductsFilter = {
@@ -698,7 +699,7 @@ export type ProductResolvers<ContextType = Context, ParentType extends Resolvers
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   productGroupId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
-  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -723,7 +724,7 @@ export type ProductModelResolvers<ContextType = Context, ParentType extends Reso
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   productGroupId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
-  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
