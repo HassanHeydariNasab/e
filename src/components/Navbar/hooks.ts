@@ -53,7 +53,6 @@ export const useNavbar = () => {
 
   const onChangeCurrency: ChangeHandler = async (event) => {
     const selectedCurrency = event.target.value;
-    console.log({ selectedCurrency });
     if (!isLoggedIn) {
       localStorage.setItem("currency", selectedCurrency);
     }
