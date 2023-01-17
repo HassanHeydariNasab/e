@@ -27,6 +27,7 @@
     "kavenegar": "^1.1.4",
     "mongodb": "^4.13.0",
     "next": "^13.1.0",
+    "node-fetch": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.41.1",

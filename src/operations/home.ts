@@ -8,6 +8,17 @@ export const GET_ME = gql`
       balance
       phoneNumber
       permissions
+      currency
+    }
+  }
+`;
+
+export const GET_EXCHANGE_RATE = gql`
+  query getExchangeRate($name: String!) {
+    exchangeRate(name: $name) {
+      _id
+      name
+      rate
     }
   }
 `;

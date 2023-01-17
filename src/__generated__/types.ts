@@ -85,6 +85,21 @@ export type CreateProductInput = {
   quantity: Scalars['Int'];
 };
 
+export type ExchangeRate = ExchangeRateModel & {
+  __typename?: 'ExchangeRate';
+  _id: Scalars['ObjectId'];
+  name: Scalars['String'];
+  rate: Scalars['Float'];
+  updatedAt?: Maybe<Scalars['Date']>;
+};
+
+export type ExchangeRateModel = {
+  _id: Scalars['ObjectId'];
+  name: Scalars['String'];
+  rate: Scalars['Float'];
+  updatedAt?: Maybe<Scalars['Date']>;
+};
+
 export type Image = {
   __typename?: 'Image';
   _id: Scalars['ObjectId'];
@@ -316,11 +331,17 @@ export type Query = {
   __typename?: 'Query';
   cart: Order;
   categories: Array<Category>;
+  exchangeRate: ExchangeRate;
   hello?: Maybe<Scalars['String']>;
   me: User;
   productGroups: Array<ProductGroup>;
   products: Array<Product>;
   user: User;
+};
+
+
+export type QueryExchangeRateArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -472,6 +493,8 @@ export type ResolversTypes = ResolversObject<{
   CreateProductGroupInput: CreateProductGroupInput;
   CreateProductInput: CreateProductInput;
   Date: ResolverTypeWrapper<Scalars['Date']>;
+  ExchangeRate: ResolverTypeWrapper<ExchangeRate>;
+  ExchangeRateModel: ResolversTypes['ExchangeRate'];
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Image: ResolverTypeWrapper<Image>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -522,6 +545,8 @@ export type ResolversParentTypes = ResolversObject<{
   CreateProductGroupInput: CreateProductGroupInput;
   CreateProductInput: CreateProductInput;
   Date: Scalars['Date'];
+  ExchangeRate: ExchangeRate;
+  ExchangeRateModel: ResolversParentTypes['ExchangeRate'];
   Float: Scalars['Float'];
   Image: Image;
   Int: Scalars['Int'];
@@ -580,6 +605,22 @@ export type CategoryResolvers<ContextType = Context, ParentType extends Resolver
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
 }
+
+export type ExchangeRateResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ExchangeRate'] = ResolversParentTypes['ExchangeRate']> = ResolversObject<{
+  _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  rate?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ExchangeRateModelResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ExchangeRateModel'] = ResolversParentTypes['ExchangeRateModel']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'ExchangeRate', ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  rate?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+}>;
 
 export type ImageResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Image'] = ResolversParentTypes['Image']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
@@ -730,6 +771,7 @@ export type ProductModelResolvers<ContextType = Context, ParentType extends Reso
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   cart?: Resolver<ResolversTypes['Order'], ParentType, ContextType>;
   categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
+  exchangeRate?: Resolver<ResolversTypes['ExchangeRate'], ParentType, ContextType, RequireFields<QueryExchangeRateArgs, 'name'>>;
   hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   productGroups?: Resolver<Array<ResolversTypes['ProductGroup']>, ParentType, ContextType, Partial<QueryProductGroupsArgs>>;
@@ -775,6 +817,8 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   AttributeValue?: AttributeValueResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
   Date?: GraphQLScalarType;
+  ExchangeRate?: ExchangeRateResolvers<ContextType>;
+  ExchangeRateModel?: ExchangeRateModelResolvers<ContextType>;
   Image?: ImageResolvers<ContextType>;
   Invoice?: InvoiceResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

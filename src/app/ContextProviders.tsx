@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import type { FC, PropsWithChildren } from "react";
 import {
   ApolloClient,
@@ -14,16 +15,19 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { toast, Toaster } from "react-hot-toast";
 
-//export const tokenVar = makeVar<string | null>(localStorage.getItem("token"));
-export const tokenVar = makeVar<string | null>(null);
+// undefined: initial value
+// null: no token in localStorage
+export const tokenVar = makeVar<string | null | undefined>(undefined);
+export const currencyVar = makeVar<string>("USD");
+export const exchangeRateVar = makeVar<number>(1);
 
 const setAuthorizationLink = setContext((operation, prevContext) => {
   if (tokenVar()) {
     return { headers: { authorization: tokenVar() } };
   }
   const savedToken = localStorage.getItem("token");
+  tokenVar(savedToken);
   if (savedToken) {
-    tokenVar(savedToken);
     return { headers: { authorization: savedToken } };
   }
 });
@@ -41,6 +45,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
   if (networkError) {
     if ((networkError as ServerParseError)?.statusCode === 401) {
       window.localStorage.removeItem("token");
+      tokenVar(null);
     }
   }
 });
@@ -51,6 +56,12 @@ const ContextProviders: FC<PropsWithChildren> = ({ children }) => {
     link: from([errorLink, setAuthorizationLink, httpLink]),
     connectToDevTools: true,
   });
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    tokenVar(savedToken);
+  }, []);
+
   return (
     <ApolloProvider client={apolloClient}>
       {children}

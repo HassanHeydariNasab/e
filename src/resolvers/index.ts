@@ -12,7 +12,14 @@ import {
   removeFromCart,
   updateOrderItemQuantity,
 } from "./mutations";
-import { me, categories, productGroups, products, cart } from "./queries";
+import {
+  me,
+  categories,
+  productGroups,
+  products,
+  cart,
+  exchangeRate,
+} from "./queries";
 import { orderItemResolvers, orderResolvers } from "./types";
 
 export const resolvers: Resolvers = {
@@ -25,6 +32,7 @@ export const resolvers: Resolvers = {
     productGroups,
     products,
     cart,
+    exchangeRate,
   },
   Mutation: {
     sendVerificationCode,

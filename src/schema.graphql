@@ -12,6 +12,7 @@ type Query {
   ): [ProductGroup!]!
   products(filter: ProductsFilter, options: ProductsOptions): [Product!]!
   cart: Order!
+  exchangeRate(name: String!): ExchangeRate!
 }
 
 type Mutation {
@@ -305,4 +306,18 @@ type Invoice {
   paymentMethod: PaymentMethod
   paymentMethodSnapshot: PaymentMethod
   price: Float!
+}
+
+interface ExchangeRateModel {
+  _id: ObjectId!
+  name: String!
+  rate: Float!
+  updatedAt: Date
+}
+
+type ExchangeRate implements ExchangeRateModel {
+  _id: ObjectId!
+  name: String!
+  rate: Float!
+  updatedAt: Date
 }

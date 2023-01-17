@@ -24,8 +24,8 @@ interface Props
   label?: string;
   options: Option[];
   error?: string;
-  onChange: ChangeHandler;
-  onBlur: ChangeHandler;
+  onChange?: ChangeHandler;
+  onBlur?: ChangeHandler;
 }
 
 const Select = forwardRef<HTMLInputElement, Props>(
@@ -85,7 +85,7 @@ const Select = forwardRef<HTMLInputElement, Props>(
     };
 
     const onBlurInput: FocusEventHandler<HTMLInputElement> = (event) => {
-      onBlur({ target: { name: rest.name || "" }, type: "blur" });
+      onBlur?.({ target: { name: rest.name || "" }, type: "blur" });
       //setIsOptionsVisible(false);
     };
 

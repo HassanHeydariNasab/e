@@ -7,3 +7,4 @@ export * from "./images";
 export * from "./orders";
 export * from "./orderItems";
 export * from "./orderShippings";
+export * from "./exchangeRates";

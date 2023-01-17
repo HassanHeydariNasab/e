@@ -3,13 +3,16 @@
 import { IoCart, IoLogIn, IoPerson } from "react-icons/io5";
 
 import { merienda } from "@styles/fonts";
-import { MyLink } from "@components";
+import { MyLink, Select } from "@components";
+import { formattedPrice } from "@services/client/price";
 
 import { useNavbar } from "./hooks";
+import { currencies } from "./consts";
 import styles from "./styles.module.scss";
 
 function Navbar() {
-  const { isLoggedIn, user, cart } = useNavbar();
+  const { isLoggedIn, user, cart, currency, exchangeRate, onChangeCurrency } =
+    useNavbar();
 
   return (
     <nav className={styles["nav"]}>
@@ -19,11 +22,18 @@ function Navbar() {
         </MyLink>
       </div>
       <div className={styles["nav__right"]}>
+        <Select
+          label="Currency"
+          options={currencies}
+          onChange={onChangeCurrency}
+          value={currency}
+        />
         {isLoggedIn ? (
           <>
             <MyLink href="/cart" variant="outlined">
               <IoCart size={"2rem"} />
-              Shopping Cart ({cart?.orderItems.length})
+              Cart: {formattedPrice(cart?.price, currency, exchangeRate)} (
+              {cart?.orderItems.length})
             </MyLink>
             <MyLink href="/profile" variant="outlined">
               <IoPerson size={"1rem"} />
