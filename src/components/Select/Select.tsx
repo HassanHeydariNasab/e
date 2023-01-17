@@ -133,7 +133,7 @@ const Select = forwardRef<HTMLInputElement, Props>(
               <li
                 onClick={onClickOption}
                 data-label={option.label}
-                key={option.value}
+                key={option.label + option.value}
               >
                 {option.label}
               </li>

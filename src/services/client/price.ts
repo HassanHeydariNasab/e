@@ -1,9 +1,8 @@
 export function formattedPrice(
-  price?: number,
+  price: number = 0,
   currency: string = "USD",
   exchangeRate: number = 1
 ) {
-  if (!price) return "";
   price *= exchangeRate;
   const priceFormatter = new Intl.NumberFormat(undefined, {
     style: "currency",

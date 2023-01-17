@@ -2,20 +2,26 @@
 
 import { useSearchParams } from "next/navigation";
 import { IoArrowBack } from "react-icons/io5";
+import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 
 import {
   AddCategoryCard,
   AddProductCard,
   CategoryCard,
+  Input,
   MyLink,
   ProductCard,
+  Select,
 } from "@components";
 import { Permission } from "@types";
 import { merienda } from "@styles/fonts";
 
 import styles from "./styles.module.scss";
 import { useHome } from "./hooks";
+import { useForm } from "react-hook-form";
+import { ProductsFilterFormSchema, productsFilterFormSchema } from "./consts";
+import { useEffect } from "react";
 
 function Home() {
   const searchParams = useSearchParams();
@@ -29,9 +35,34 @@ function Home() {
     isLoadingCategories,
     products,
     permissions,
+    onChangeProductsFilter,
   } = useHome({
     categoryId,
   });
+
+  const {
+    formState: { errors: productsFilterErrors },
+    register,
+    handleSubmit,
+  } = useForm<ProductsFilterFormSchema>({
+    resolver: yupResolver(productsFilterFormSchema),
+    mode: "all",
+    defaultValues: { sort: JSON.stringify({ createdAt: -1 }) },
+  });
+
+  useEffect(() => {
+    if (currentCategory?.attributeKeys) {
+      for (
+        let index = 0;
+        index < currentCategory.attributeKeys.length;
+        index++
+      ) {
+        register(`attributeValues.${index}.name`, {
+          value: currentCategory.attributeKeys[index].name,
+        });
+      }
+    }
+  }, [currentCategory]);
 
   return (
     <main>
@@ -64,6 +95,28 @@ function Home() {
             <CategoryCard category={subcategory} key={subcategory._id} />
           ))}
       </div>
+      <form
+        onChange={handleSubmit(onChangeProductsFilter, (e) =>
+          console.log({ e })
+        )}
+        className={styles["products-filters"]}
+      >
+        <Select
+          {...register("sort")}
+          options={[
+            { label: "Most Recent", value: JSON.stringify({ createdAt: -1 }) },
+            { label: "Oldest", value: JSON.stringify({ createdAt: 1 }) },
+          ]}
+          label="Sort By"
+        />
+        {currentCategory?.attributeKeys.map((attributeKey, index) => (
+          <Input
+            {...register(`attributeValues.${index}.value`)}
+            key={attributeKey.name}
+            label={attributeKey.name}
+          />
+        ))}
+      </form>
       <div className={styles["products"]}>
         {categoryId &&
           (permissions?.includes(Permission.Admin) ||

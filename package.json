@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@apollo/client": "^3.7.3",
+    "@apollo/client": "^3.7.4",
     "@apollo/server": "^4.3.0",
     "@as-integrations/next": "^1.2.0",
     "@graphql-codegen/introspection": "^2.2.3",

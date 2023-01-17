@@ -53,6 +53,12 @@
   }
 }
 
+.products-filters {
+  display: flex;
+  gap: 1rem;
+  padding: 2rem;
+}
+
 .products {
   display: flex;
   flex-wrap: wrap;

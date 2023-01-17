@@ -6,6 +6,7 @@
   background-color: c.$secondary;
   border: 2px solid c.$transparent-dark-secondary;
   border-radius: v.$input-border-radius;
+  max-width: fit-content;
 
   label {
     display: block;
@@ -42,6 +43,7 @@
 .options {
   position: absolute;
   width: 100%;
+  z-index: v.$z-Select__options;
   border-top: 1px solid c.$transparent-dark-secondary;
   margin: 0;
   margin-top: 8px;
