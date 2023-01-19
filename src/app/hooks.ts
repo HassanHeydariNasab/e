@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
-import type { SubmitHandler } from "react-hook-form";
+import type { UseFormGetValues } from "react-hook-form";
 
 import { GET_CATEGORIES, GET_ME, GET_PRODUCTS } from "@operations";
 import type {
@@ -16,9 +16,10 @@ import { tokenVar } from "./ContextProviders";
 
 interface Props {
   categoryId: string | null;
+  getProductsFilterValues: UseFormGetValues<ProductsFilterFormSchema>;
 }
 
-export const useHome = ({ categoryId }: Props) => {
+export const useHome = ({ categoryId, getProductsFilterValues }: Props) => {
   const token = useReactiveVar(tokenVar);
 
   const { data: categoriesData, loading: isLoadingCategories } = useQuery<{
@@ -46,17 +47,10 @@ export const useHome = ({ categoryId }: Props) => {
   );
 
   useEffect(() => {
-    getProducts({
-      variables: {
-        filter: { categoryId },
-      },
-    });
+    onChangeProductsFilter(getProductsFilterValues());
   }, []);
 
-  const onChangeProductsFilter: SubmitHandler<ProductsFilterFormSchema> = (
-    data,
-    event
-  ) => {
+  const onChangeProductsFilter = (data: ProductsFilterFormSchema) => {
     const { sort, attributeValues } = data;
     let modifiedAttributeValues = attributeValues?.filter(
       (attributeValue) => (attributeValue.value?.length || 0) > 0
@@ -64,7 +58,6 @@ export const useHome = ({ categoryId }: Props) => {
     if ((modifiedAttributeValues?.length || 0) === 0) {
       modifiedAttributeValues = undefined;
     }
-    console.log({ sort, attributeValues, modifiedAttributeValues });
     getProducts({
       variables: {
         filter: {

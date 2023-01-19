@@ -24,6 +24,7 @@ function Navbar() {
       <div className={styles["nav__right"]}>
         <Select
           label="Currency"
+          name="currency"
           options={currencies}
           onChange={onChangeCurrency}
           value={currency}

@@ -51,7 +51,10 @@ const Select = forwardRef<HTMLInputElement, Props>(
             }
           },
           get value() {
-            const value = inputRef.current?.value;
+            const label = inputRef.current?.value;
+            const value = options.find(
+              (option) => option.label === label
+            )?.value;
             if (value) {
               return value;
             }
@@ -69,13 +72,14 @@ const Select = forwardRef<HTMLInputElement, Props>(
         inputRef.current.value = label;
         const value = options.find((option) => option.label === label)?.value;
         if (!onChange) return;
-        onChange({
+        const changeEvent = {
           target: {
             name: rest.name || "",
             value,
           },
           type: "change",
-        });
+        };
+        onChange(changeEvent);
       }
       setIsOptionsVisible(false);
     };
@@ -125,7 +129,7 @@ const Select = forwardRef<HTMLInputElement, Props>(
           )}
         </label>
         <div className={styles["input-container"]} onClick={onClickInput}>
-          <input ref={inputRef} {...rest} onBlur={onBlurInput} disabled />
+          <input ref={inputRef} {...rest} onBlur={onBlurInput} readOnly />
         </div>
         {isOptionsVisible && (
           <ul className={styles["options"]}>
