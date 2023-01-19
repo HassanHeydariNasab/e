@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
-import type { UseFormGetValues } from "react-hook-form";
+import type { SubmitHandler, UseFormGetValues } from "react-hook-form";
 
 import { GET_CATEGORIES, GET_ME, GET_PRODUCTS } from "@operations";
 import type {
@@ -32,7 +32,7 @@ export const useHome = ({ categoryId, getProductsFilterValues }: Props) => {
         products: Product[];
       },
       QueryProductsArgs
-    >(GET_PRODUCTS, { fetchPolicy: "network-only" });
+    >(GET_PRODUCTS);
 
   const { data: userData } = useQuery<{ me: User }>(GET_ME, {
     skip: token === null,
@@ -50,11 +50,14 @@ export const useHome = ({ categoryId, getProductsFilterValues }: Props) => {
     onChangeProductsFilter(getProductsFilterValues());
   }, []);
 
-  const onChangeProductsFilter = (data: ProductsFilterFormSchema) => {
+  const onChangeProductsFilter: SubmitHandler<ProductsFilterFormSchema> = (
+    data
+  ) => {
     const { sort, attributeValues } = data;
     let modifiedAttributeValues = attributeValues?.filter(
       (attributeValue) => (attributeValue.value?.length || 0) > 0
     );
+    modifiedAttributeValues = modifiedAttributeValues?.map((a) => ({ ...a }));
     if ((modifiedAttributeValues?.length || 0) === 0) {
       modifiedAttributeValues = undefined;
     }
