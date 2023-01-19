@@ -36,7 +36,7 @@ function Home() {
     formState: { errors: productsFilterErrors },
     register,
     watch,
-    trigger,
+    handleSubmit,
     getValues: getProductsFilterValues,
   } = useForm<ProductsFilterFormSchema>({
     resolver: yupResolver(productsFilterFormSchema),
@@ -62,14 +62,10 @@ function Home() {
   });
 
   useEffect(() => {
-    watch(async (data, { name, type }) => {
-      if (!data) return;
-      const isValid = await trigger();
-      if (isValid) {
-        onChangeProductsFilter(data as ProductsFilterFormSchema);
-      }
+    watch(() => {
+      handleSubmit(onChangeProductsFilter)();
     });
-  }, [watch, onChangeProductsFilter]);
+  }, [watch, handleSubmit, onChangeProductsFilter]);
 
   useEffect(() => {
     if (currentCategory?.attributeKeys) {

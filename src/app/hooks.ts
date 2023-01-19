@@ -58,7 +58,7 @@ export const useHome = ({ categoryId, getProductsFilterValues }: Props) => {
     if ((modifiedAttributeValues?.length || 0) === 0) {
       modifiedAttributeValues = undefined;
     }
-    getProducts({
+    return getProducts({
       variables: {
         filter: {
           categoryId,
