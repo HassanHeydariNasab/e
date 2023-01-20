@@ -100,7 +100,6 @@ const Select = forwardRef<HTMLInputElement, Props>(
     };
 
     const onClickOption: MouseEventHandler<HTMLLIElement> = (event) => {
-      console.log("click");
       const label = event.currentTarget.dataset.label;
       if (label) selectOption(label);
     };
@@ -117,7 +116,6 @@ const Select = forwardRef<HTMLInputElement, Props>(
 
     const onKeyDownInput: KeyboardEventHandler<HTMLInputElement> = (event) => {
       const key = event.key;
-      console.log("down", { key });
       if (
         [
           " ",
