@@ -111,7 +111,7 @@ const Select = forwardRef<HTMLInputElement, Props>(
     };
 
     const onBlurInput: FocusEventHandler<HTMLInputElement> = (event) => {
-      onBlur?.({ target: { name: rest.name || "" }, type: "blur" });
+      //onBlur?.({ target: { name: rest.name || "" }, type: "blur" });
       setIsOptionsVisible(false);
     };
 
