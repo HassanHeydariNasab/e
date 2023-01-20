@@ -6,6 +6,8 @@ export const sortOptions = [
     value: JSON.stringify({ createdAt: -1 }),
   },
   { label: "Oldest", value: JSON.stringify({ createdAt: 1 }) },
+  { label: "Most Expensive", value: JSON.stringify({ price: -1 }) },
+  { label: "Cheapest", value: JSON.stringify({ price: 1 }) },
 ];
 
 export const productsFilterFormSchema = yup.object({

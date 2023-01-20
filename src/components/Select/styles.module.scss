@@ -56,16 +56,24 @@
   border-radius: v.$input-border-radius;
   box-shadow: 0px 0px 12px 4px c.$dark-secondary;
 
-  & li {
+  &__option {
     padding: 12px 16px;
     color: c.$dark-secondary;
     cursor: pointer;
+    font-size: medium;
     list-style: none;
     @include v.transition;
 
-    &:hover {
-      background-color: c.$dark-secondary;
-      color: c.$secondary;
+    &[aria-selected="true"] {
+      background-color: c.$primary;
+      color: c.$dark-primary;
+    }
+
+    &:hover,
+    &:focus,
+    &--hover {
+      background-color: c.$dark-secondary !important;
+      color: c.$secondary !important;
     }
   }
 }
