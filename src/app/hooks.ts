@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
-import type { SubmitHandler, UseFormGetValues } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
 
 import { GET_CATEGORIES, GET_ME, GET_PRODUCTS } from "@operations";
 import type {
@@ -16,10 +15,9 @@ import { tokenVar } from "./ContextProviders";
 
 interface Props {
   categoryId: string | null;
-  getProductsFilterValues: UseFormGetValues<ProductsFilterFormSchema>;
 }
 
-export const useHome = ({ categoryId, getProductsFilterValues }: Props) => {
+export const useHome = ({ categoryId }: Props) => {
   const token = useReactiveVar(tokenVar);
 
   const { data: categoriesData, loading: isLoadingCategories } = useQuery<{
@@ -45,10 +43,6 @@ export const useHome = ({ categoryId, getProductsFilterValues }: Props) => {
   const parentCategory = categoriesData?.categories.find(
     (category) => category._id === currentCategory?.parentId
   );
-
-  useEffect(() => {
-    onChangeProductsFilter(getProductsFilterValues());
-  }, []);
 
   const onChangeProductsFilter: SubmitHandler<ProductsFilterFormSchema> = (
     data

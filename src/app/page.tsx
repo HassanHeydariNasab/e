@@ -38,6 +38,7 @@ function Home() {
     watch,
     handleSubmit,
     getValues: getProductsFilterValues,
+    reset: resetProductsFilterForm,
   } = useForm<ProductsFilterFormSchema>({
     resolver: yupResolver(productsFilterFormSchema),
     mode: "onChange",
@@ -58,7 +59,6 @@ function Home() {
     onChangeProductsFilter,
   } = useHome({
     categoryId,
-    getProductsFilterValues,
   });
 
   useEffect(() => {
@@ -68,7 +68,10 @@ function Home() {
   }, [watch, handleSubmit, onChangeProductsFilter]);
 
   useEffect(() => {
-    if (currentCategory?.attributeKeys) {
+    if (!currentCategory) return;
+    resetProductsFilterForm();
+    onChangeProductsFilter(getProductsFilterValues());
+    if (currentCategory.attributeKeys) {
       for (
         let index = 0;
         index < currentCategory.attributeKeys.length;
@@ -112,34 +115,39 @@ function Home() {
             <CategoryCard category={subcategory} key={subcategory._id} />
           ))}
       </div>
-      <form className={styles["products-filters"]}>
-        <Select
-          {...register("sort")}
-          options={sortOptions}
-          label="Sort By"
-          error={productsFilterErrors.sort?.message}
-        />
-        {currentCategory?.attributeKeys.map((attributeKey, index) => (
-          <Input
-            {...register(`attributeValues.${index}.value`)}
-            key={attributeKey.name}
-            label={attributeKey.name}
-            error={
-              productsFilterErrors.attributeValues?.at?.(index)?.value?.message
-            }
-          />
-        ))}
-      </form>
-      <div className={styles["products"]}>
-        {categoryId &&
-          (permissions?.includes(Permission.Admin) ||
-            permissions?.includes(Permission.Product)) && (
-            <AddProductCard categoryId={categoryId} />
-          )}
-        {products.map((product) => (
-          <ProductCard product={product} key={product._id} />
-        ))}
-      </div>
+      {categoryId !== null && (
+        <>
+          <form className={styles["products-filters"]}>
+            <Select
+              {...register("sort")}
+              options={sortOptions}
+              label="Sort By"
+              error={productsFilterErrors.sort?.message}
+            />
+            {currentCategory?.attributeKeys.map((attributeKey, index) => (
+              <Input
+                {...register(`attributeValues.${index}.value`)}
+                key={attributeKey.name}
+                label={attributeKey.name}
+                error={
+                  productsFilterErrors.attributeValues?.at?.(index)?.value
+                    ?.message
+                }
+              />
+            ))}
+          </form>
+          <div className={styles["products"]}>
+            {categoryId &&
+              (permissions?.includes(Permission.Admin) ||
+                permissions?.includes(Permission.Product)) && (
+                <AddProductCard categoryId={categoryId} />
+              )}
+            {products.map((product) => (
+              <ProductCard product={product} key={product._id} />
+            ))}
+          </div>
+        </>
+      )}
     </main>
   );
 }
