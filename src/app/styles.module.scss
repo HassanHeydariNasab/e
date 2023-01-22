@@ -34,6 +34,12 @@
   overflow-y: auto;
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
+}
+
 .categories {
   display: flex;
   flex-wrap: wrap;
@@ -76,4 +82,8 @@
     flex: 280px 1 1;
     max-width: 500px;
   }
+}
+
+.pagination {
+  align-self: center;
 }

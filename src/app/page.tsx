@@ -13,6 +13,7 @@ import {
   CategoryCard,
   Input,
   MyLink,
+  Pagination,
   ProductCard,
   Select,
 } from "@components";
@@ -21,11 +22,8 @@ import { merienda } from "@styles/fonts";
 
 import styles from "./styles.module.scss";
 import { useHome } from "./hooks";
-import {
-  ProductsFilterFormSchema,
-  productsFilterFormSchema,
-  sortOptions,
-} from "./consts";
+import { productsFilterFormSchema, sortOptions } from "./consts";
+import type { ProductsFilterFormSchema } from "./consts";
 
 function Home() {
   const searchParams = useSearchParams();
@@ -46,6 +44,7 @@ function Home() {
     defaultValues: {
       sort: JSON.stringify({ createdAt: -1 }),
       attributeValues: [],
+      skip: 0,
     },
   });
 
@@ -64,7 +63,7 @@ function Home() {
 
   useEffect(() => {
     watch(() => {
-      handleSubmit(onChangeProductsFilter)();
+      handleSubmit(onChangeProductsFilter, (e) => console.log({ e }))();
     });
   }, [watch, handleSubmit, onChangeProductsFilter]);
 
@@ -86,7 +85,7 @@ function Home() {
   }, [currentCategory]);
 
   return (
-    <main>
+    <main className={styles["main"]}>
       <div className={styles["categories"]}>
         {categoryId !== null && (
           <div className={styles["categories__current-category"]}>
@@ -138,7 +137,8 @@ function Home() {
             ))}
           </form>
           <div className={styles["products"]}>
-            {categoryId &&
+            {productsPagination?.skip === 0 &&
+              categoryId &&
               (permissions?.includes(Permission.Admin) ||
                 permissions?.includes(Permission.Product)) && (
                 <AddProductCard categoryId={categoryId} />
@@ -147,6 +147,14 @@ function Home() {
               <ProductCard product={product} key={product._id} />
             ))}
           </div>
+          {productsPagination && (
+            <Pagination
+              name="skip"
+              pagination={productsPagination}
+              containerClassName={styles["pagination"]}
+              register={register}
+            />
+          )}
         </>
       )}
     </main>

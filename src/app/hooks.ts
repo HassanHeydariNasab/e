@@ -48,7 +48,7 @@ export const useHome = ({ categoryId }: Props) => {
   const onChangeProductsFilter: SubmitHandler<ProductsFilterFormSchema> = (
     data
   ) => {
-    const { sort, attributeValues } = data;
+    const { attributeValues, sort, skip } = data;
     let modifiedAttributeValues = attributeValues?.filter(
       (attributeValue) => (attributeValue.value?.length || 0) > 0
     );
@@ -63,7 +63,11 @@ export const useHome = ({ categoryId }: Props) => {
           attributeValues:
             modifiedAttributeValues as ProductsFilter["attributeValues"],
         },
-        options: { ...(sort && { sort: JSON.parse(sort) }) },
+        options: {
+          ...(sort && { sort: JSON.parse(sort) }),
+          skip,
+          limit: 1,
+        },
       },
     });
   };

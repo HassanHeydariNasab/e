@@ -18,6 +18,11 @@ export const productsFilterFormSchema = yup.object({
       value: yup.string(),
     })
   ),
+  skip: yup
+    .number()
+    .transform((value: string) => +value)
+    .min(0)
+    .required(),
 });
 
 export type ProductsFilterFormSchema = yup.InferType<
