@@ -23,6 +23,7 @@ export const productsFilterFormSchema = yup.object({
     .transform((value: string) => +value)
     .min(0)
     .required(),
+  limit: yup.number().min(1).required(),
 });
 
 export type ProductsFilterFormSchema = yup.InferType<

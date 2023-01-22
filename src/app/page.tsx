@@ -45,6 +45,7 @@ function Home() {
       sort: JSON.stringify({ createdAt: -1 }),
       attributeValues: [],
       skip: 0,
+      limit: 12,
     },
   });
 
@@ -55,6 +56,7 @@ function Home() {
     isLoadingCategories,
     products,
     productsPagination,
+    isLoadingProducts,
     permissions,
     onChangeProductsFilter,
   } = useHome({
@@ -62,9 +64,12 @@ function Home() {
   });
 
   useEffect(() => {
-    watch(() => {
+    const subscription = watch(() => {
       handleSubmit(onChangeProductsFilter, (e) => console.log({ e }))();
     });
+    () => {
+      subscription.unsubscribe();
+    };
   }, [watch, handleSubmit, onChangeProductsFilter]);
 
   useEffect(() => {
@@ -83,6 +88,10 @@ function Home() {
       }
     }
   }, [currentCategory]);
+
+  useEffect(() => {
+    register("limit");
+  }, [register]);
 
   return (
     <main className={styles["main"]}>
@@ -136,7 +145,12 @@ function Home() {
               />
             ))}
           </form>
-          <div className={styles["products"]}>
+          <div
+            className={clsx(
+              styles["products"],
+              isLoadingProducts && styles["products--stale"]
+            )}
+          >
             {productsPagination?.skip === 0 &&
               categoryId &&
               (permissions?.includes(Permission.Admin) ||
@@ -151,7 +165,10 @@ function Home() {
             <Pagination
               name="skip"
               pagination={productsPagination}
-              containerClassName={styles["pagination"]}
+              containerClassName={clsx(
+                styles["pagination"],
+                isLoadingProducts && styles["pagination--stale"]
+              )}
               register={register}
             />
           )}

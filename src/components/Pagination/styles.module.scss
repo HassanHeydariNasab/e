@@ -3,6 +3,7 @@
 
 .container {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
 
   &__label {
@@ -21,5 +22,12 @@
       border-color: c.$primary;
       background-color: c.$primary;
     }
+  }
+
+  &__spacer {
+    width: 2rem;
+    margin: 0 -0.5rem;
+    height: 4px;
+    background-color: c.$dark-primary;
   }
 }

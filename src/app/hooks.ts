@@ -25,13 +25,19 @@ export const useHome = ({ categoryId }: Props) => {
     categories: Category[];
   }>(GET_CATEGORIES);
 
-  const [getProducts, { data: productsData, loading: isLoadingProducts }] =
-    useLazyQuery<
-      {
-        products: { results: Product[]; pagination: Pagination };
-      },
-      QueryProductsArgs
-    >(GET_PRODUCTS);
+  const [
+    getProducts,
+    {
+      data: productsData,
+      previousData: productsPreviousData,
+      loading: isLoadingProducts,
+    },
+  ] = useLazyQuery<
+    {
+      products: { results: Product[]; pagination: Pagination };
+    },
+    QueryProductsArgs
+  >(GET_PRODUCTS);
 
   const { data: userData } = useQuery<{ me: User }>(GET_ME, {
     skip: token === null,
@@ -48,7 +54,7 @@ export const useHome = ({ categoryId }: Props) => {
   const onChangeProductsFilter: SubmitHandler<ProductsFilterFormSchema> = (
     data
   ) => {
-    const { attributeValues, sort, skip } = data;
+    const { attributeValues, sort, skip, limit } = data;
     let modifiedAttributeValues = attributeValues?.filter(
       (attributeValue) => (attributeValue.value?.length || 0) > 0
     );
@@ -66,7 +72,7 @@ export const useHome = ({ categoryId }: Props) => {
         options: {
           ...(sort && { sort: JSON.parse(sort) }),
           skip,
-          limit: 1,
+          limit,
         },
       },
     });
@@ -80,8 +86,14 @@ export const useHome = ({ categoryId }: Props) => {
         (category) => category.parentId === categoryId
       ) || [],
     isLoadingCategories,
-    products: productsData?.products.results || [],
-    productsPagination: productsData?.products.pagination,
+    products:
+      productsData?.products.results ||
+      productsPreviousData?.products.results ||
+      [],
+    productsPagination:
+      productsData?.products.pagination ||
+      productsPreviousData?.products.pagination,
+    isLoadingProducts,
     permissions: userData?.me.permissions,
     onChangeProductsFilter,
   };

@@ -1,4 +1,5 @@
 @use "../styles/colors.scss" as c;
+@use "../styles/variables.scss" as v;
 
 .html {
   background-color: black;
@@ -75,15 +76,25 @@
 
 .products {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 16px;
-  padding: 32px;
+  gap: 1rem;
+  padding: 2rem;
+
+  &--stale {
+    @include v.stale-animation();
+  }
+
   & > * {
-    flex: 280px 1 1;
-    max-width: 500px;
+    flex: 280px 2 1;
+    max-width: 320px;
   }
 }
 
 .pagination {
   align-self: center;
+
+  &--stale {
+    @include v.stale-animation();
+  }
 }
