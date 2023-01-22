@@ -1,7 +1,7 @@
 import type { Filter, FindOptions } from "mongodb";
 
-import { Permission, Product } from "@types";
-import type { QueryResolvers } from "@types";
+import { Permission } from "@types";
+import type { QueryResolvers, Product } from "@types";
 import { CategoriesCollection, ProductsCollection } from "@models";
 import { childrenCategories } from "@services/server/category";
 
@@ -20,8 +20,8 @@ export const products: QueryResolvers["products"] = async (
     ...(filter.isHidden && { isHidden: true }),
   };
 
-  const modifiedOptions: FindOptions = {
-    ...(options.skip && { skip: options.skip }),
+  const modifiedOptions: FindOptions<Omit<Product, "_id">> = {
+    ...(options.skip ? { skip: options.skip } : { skip: 0 }),
     ...(options.limit ? { limit: options.limit } : { limit: 12 }),
     ...(options.sort
       ? { sort: options.sort as FindOptions["sort"] }
@@ -47,5 +47,12 @@ export const products: QueryResolvers["products"] = async (
     modifiedFilter,
     modifiedOptions
   ).toArray();
-  return products;
+
+  const pagination = {
+    skip: modifiedOptions.skip!,
+    limit: modifiedOptions.limit!,
+    total: await ProductsCollection.countDocuments(modifiedFilter),
+  };
+
+  return { results: products, pagination };
 };

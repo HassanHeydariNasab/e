@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <ContextProviders>
           <Navbar />
-          {children}
+          <div className={styles["content"]}>{children}</div>
         </ContextProviders>
       </body>
     </html>

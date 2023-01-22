@@ -35,5 +35,7 @@
     font-size: large;
     font-weight: 700;
     color: c.$darker-primary;
+    box-shadow: 0px 4px 32px 8px c.$darker-secondary;
+    border-top: 2px solid c.$dark-secondary;
   }
 }

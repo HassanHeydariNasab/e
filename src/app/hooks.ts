@@ -4,6 +4,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { GET_CATEGORIES, GET_ME, GET_PRODUCTS } from "@operations";
 import type {
   Category,
+  Pagination,
   Product,
   ProductsFilter,
   QueryProductsArgs,
@@ -27,7 +28,7 @@ export const useHome = ({ categoryId }: Props) => {
   const [getProducts, { data: productsData, loading: isLoadingProducts }] =
     useLazyQuery<
       {
-        products: Product[];
+        products: { results: Product[]; pagination: Pagination };
       },
       QueryProductsArgs
     >(GET_PRODUCTS);
@@ -75,7 +76,8 @@ export const useHome = ({ categoryId }: Props) => {
         (category) => category.parentId === categoryId
       ) || [],
     isLoadingCategories,
-    products: productsData?.products || [],
+    products: productsData?.products.results || [],
+    productsPagination: productsData?.products.pagination,
     permissions: userData?.me.permissions,
     onChangeProductsFilter,
   };

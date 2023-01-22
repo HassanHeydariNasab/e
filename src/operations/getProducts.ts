@@ -3,20 +3,27 @@ import { gql } from "@apollo/client";
 export const GET_PRODUCTS = gql`
   query getProducts($filter: ProductsFilter, $options: ProductsOptions) {
     products(filter: $filter, options: $options) {
-      _id
-      attributeValues {
+      results {
+        _id
+        attributeValues {
+          name
+          value
+        }
+        categoryId
+        createdAt
+        defaultImageId
+        imageIds
+        isHidden
         name
-        value
+        price
+        productGroupId
+        quantity
       }
-      categoryId
-      createdAt
-      defaultImageId
-      imageIds
-      isHidden
-      name
-      price
-      productGroupId
-      quantity
+      pagination {
+        skip
+        limit
+        total
+      }
     }
   }
 `;

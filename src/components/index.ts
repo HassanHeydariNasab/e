@@ -3,6 +3,7 @@ export * from "./Select";
 export * from "./FileInput";
 export * from "./QuantityInput";
 export * from "./Button";
+export * from "./Pagination";
 export * from "./Navbar";
 export * from "./MyLink";
 export * from "./ProductCard";

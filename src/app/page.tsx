@@ -55,6 +55,7 @@ function Home() {
     subcategories,
     isLoadingCategories,
     products,
+    productsPagination,
     permissions,
     onChangeProductsFilter,
   } = useHome({

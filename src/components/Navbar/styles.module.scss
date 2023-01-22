@@ -1,11 +1,19 @@
+@use "../../styles/colors.scss" as c;
+@use "../../styles/variables.scss" as v;
+
 .nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding: 16px;
+  box-shadow: 0px 16px 32px 8px c.$darker-primary;
+  border-bottom: 2px solid c.$primary;
+  z-index: v.$z-Navbar;
 
   &__right {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
   }
 }

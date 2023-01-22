@@ -5,7 +5,9 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  height: 100%;
+  padding: 2rem 0;
 
   > form {
     display: flex;

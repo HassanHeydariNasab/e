@@ -243,6 +243,19 @@ export enum OrderStatus {
   Shipping = 'SHIPPING'
 }
 
+export type PaginatedProducts = {
+  __typename?: 'PaginatedProducts';
+  pagination: Pagination;
+  results: Array<Product>;
+};
+
+export type Pagination = {
+  __typename?: 'Pagination';
+  limit: Scalars['Int'];
+  skip: Scalars['Int'];
+  total: Scalars['Int'];
+};
+
 export type PaymentMethod = {
   __typename?: 'PaymentMethod';
   _id: Scalars['ObjectId'];
@@ -335,7 +348,7 @@ export type Query = {
   hello?: Maybe<Scalars['String']>;
   me: User;
   productGroups: Array<ProductGroup>;
-  products: Array<Product>;
+  products: PaginatedProducts;
   user: User;
 };
 
@@ -508,6 +521,8 @@ export type ResolversTypes = ResolversObject<{
   OrderShipping: ResolverTypeWrapper<OrderShipping>;
   OrderShippingModel: ResolversTypes['OrderShipping'];
   OrderStatus: OrderStatus;
+  PaginatedProducts: ResolverTypeWrapper<PaginatedProducts>;
+  Pagination: ResolverTypeWrapper<Pagination>;
   PaymentMethod: ResolverTypeWrapper<PaymentMethod>;
   Permission: Permission;
   Product: ResolverTypeWrapper<Product>;
@@ -559,6 +574,8 @@ export type ResolversParentTypes = ResolversObject<{
   OrderModel: ResolversParentTypes['Order'];
   OrderShipping: OrderShipping;
   OrderShippingModel: ResolversParentTypes['OrderShipping'];
+  PaginatedProducts: PaginatedProducts;
+  Pagination: Pagination;
   PaymentMethod: PaymentMethod;
   Product: Product;
   ProductGroup: ProductGroup;
@@ -723,6 +740,19 @@ export type OrderShippingModelResolvers<ContextType = Context, ParentType extend
   weight?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
+export type PaginatedProductsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PaginatedProducts'] = ResolversParentTypes['PaginatedProducts']> = ResolversObject<{
+  pagination?: Resolver<ResolversTypes['Pagination'], ParentType, ContextType>;
+  results?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PaginationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Pagination'] = ResolversParentTypes['Pagination']> = ResolversObject<{
+  limit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  skip?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type PaymentMethodResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PaymentMethod'] = ResolversParentTypes['PaymentMethod']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -775,7 +805,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   productGroups?: Resolver<Array<ResolversTypes['ProductGroup']>, ParentType, ContextType, Partial<QueryProductGroupsArgs>>;
-  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType, Partial<QueryProductsArgs>>;
+  products?: Resolver<ResolversTypes['PaginatedProducts'], ParentType, ContextType, Partial<QueryProductsArgs>>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'UserInput'>>;
 }>;
 
@@ -829,6 +859,8 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   OrderModel?: OrderModelResolvers<ContextType>;
   OrderShipping?: OrderShippingResolvers<ContextType>;
   OrderShippingModel?: OrderShippingModelResolvers<ContextType>;
+  PaginatedProducts?: PaginatedProductsResolvers<ContextType>;
+  Pagination?: PaginationResolvers<ContextType>;
   PaymentMethod?: PaymentMethodResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductGroup?: ProductGroupResolvers<ContextType>;

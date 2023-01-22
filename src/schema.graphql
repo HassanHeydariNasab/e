@@ -10,7 +10,7 @@ type Query {
     filter: ProductGroupsFilter
     options: ProductGroupsOptions
   ): [ProductGroup!]!
-  products(filter: ProductsFilter, options: ProductsOptions): [Product!]!
+  products(filter: ProductsFilter, options: ProductsOptions): PaginatedProducts!
   cart: Order!
   exchangeRate(name: String!): ExchangeRate!
 }
@@ -123,6 +123,12 @@ input UpdateOrderItemQuantityInput {
   quantity: Int!
 }
 
+type Pagination {
+  skip: Int!
+  limit: Int!
+  total: Int!
+}
+
 enum Permission {
   ADMIN
   PRODUCT
@@ -210,6 +216,11 @@ type Product implements ProductModel {
   price: Float!
   productGroupId: ObjectId!
   quantity: Int
+}
+
+type PaginatedProducts {
+  results: [Product!]!
+  pagination: Pagination!
 }
 
 type Image {
