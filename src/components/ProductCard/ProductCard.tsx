@@ -21,7 +21,8 @@ const ProductCard: FC<Props> = ({ product }) => {
         <Image
           src={imagePath(product.defaultImageId)}
           alt={product.name}
-          fill
+          height={360}
+          width={360}
           className={styles["container__image"]}
         />
         <div className={styles["container__info"]}>

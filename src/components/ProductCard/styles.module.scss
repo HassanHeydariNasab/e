@@ -15,10 +15,8 @@
   }
 
   &__image {
-    aspect-ratio: 1;
     position: static !important;
     object-fit: cover;
-    height: 70% !important;
     border-top-left-radius: 28px;
     border-top-right-radius: 28px;
   }

@@ -26,7 +26,10 @@ const AddToCart: FC<Props> = ({ product }) => {
   } = useAddToCart({ productId: product._id });
 
   return (
-    <div className={styles["container"]}>
+    <div
+      className={styles["container"]}
+      onClick={(event) => event.preventDefault()}
+    >
       {orderItem && (
         <QuantityInput
           name="quantity"

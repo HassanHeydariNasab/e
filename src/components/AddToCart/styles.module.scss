@@ -4,7 +4,7 @@
 .container {
   display: flex;
   gap: 1rem;
-  max-width: 320px;
+  width: 320px;
 
   &__quantity-input {
     flex: 1;

@@ -84,11 +84,6 @@
   &--stale {
     @include v.stale-animation();
   }
-
-  & > * {
-    flex: 280px 2 1;
-    max-width: 320px;
-  }
 }
 
 .pagination {

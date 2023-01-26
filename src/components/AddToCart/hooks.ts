@@ -66,6 +66,7 @@ export const useAddToCart = ({ productId }: Props) => {
   );
 
   const onClickAddToCart: MouseEventHandler = (event) => {
+    event.preventDefault();
     addToCart({ variables: { input: { productId, quantity: 1 } } }).then(
       (result) => {
         const order = result.data?.addToCart;
@@ -76,6 +77,8 @@ export const useAddToCart = ({ productId }: Props) => {
   };
 
   const onClickRemoveFromCart: MouseEventHandler = (event) => {
+    event.preventDefault();
+
     if (!orderItem) return;
 
     removeFromCart({
