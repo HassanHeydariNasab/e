@@ -2,7 +2,8 @@
 @use "../../styles/variables.scss" as v;
 
 .container {
-  aspect-ratio: 3/5;
+  height: 100%;
+  min-height: 360px;
   border-radius: 32px;
   background-color: c.$primary;
   color: c.$dark-primary;

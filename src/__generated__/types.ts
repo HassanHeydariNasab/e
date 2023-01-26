@@ -283,8 +283,17 @@ export type Product = ProductModel & {
   quantity?: Maybe<Scalars['Int']>;
 };
 
-export type ProductGroup = {
+export type ProductGroup = ProductGroupModel & {
   __typename?: 'ProductGroup';
+  _id: Scalars['ObjectId'];
+  categoryId: Scalars['ObjectId'];
+  createdAt?: Maybe<Scalars['Date']>;
+  isHidden?: Maybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  products: Array<Product>;
+};
+
+export type ProductGroupModel = {
   _id: Scalars['ObjectId'];
   categoryId: Scalars['ObjectId'];
   createdAt?: Maybe<Scalars['Date']>;
@@ -347,14 +356,21 @@ export type Query = {
   exchangeRate: ExchangeRate;
   hello?: Maybe<Scalars['String']>;
   me: User;
+  product: Product;
   productGroups: Array<ProductGroup>;
   products: PaginatedProducts;
+  productsInProductGroup: Array<Product>;
   user: User;
 };
 
 
 export type QueryExchangeRateArgs = {
   name: Scalars['String'];
+};
+
+
+export type QueryProductArgs = {
+  productId: Scalars['ObjectId'];
 };
 
 
@@ -367,6 +383,11 @@ export type QueryProductGroupsArgs = {
 export type QueryProductsArgs = {
   filter?: InputMaybe<ProductsFilter>;
   options?: InputMaybe<ProductsOptions>;
+};
+
+
+export type QueryProductsInProductGroupArgs = {
+  productId: Scalars['ObjectId'];
 };
 
 
@@ -527,6 +548,7 @@ export type ResolversTypes = ResolversObject<{
   Permission: Permission;
   Product: ResolverTypeWrapper<Product>;
   ProductGroup: ResolverTypeWrapper<ProductGroup>;
+  ProductGroupModel: ResolversTypes['ProductGroup'];
   ProductGroupsFilter: ProductGroupsFilter;
   ProductGroupsOptions: ProductGroupsOptions;
   ProductGroupsSort: ProductGroupsSort;
@@ -579,6 +601,7 @@ export type ResolversParentTypes = ResolversObject<{
   PaymentMethod: PaymentMethod;
   Product: Product;
   ProductGroup: ProductGroup;
+  ProductGroupModel: ResolversParentTypes['ProductGroup'];
   ProductGroupsFilter: ProductGroupsFilter;
   ProductGroupsOptions: ProductGroupsOptions;
   ProductGroupsSort: ProductGroupsSort;
@@ -780,7 +803,17 @@ export type ProductGroupResolvers<ContextType = Context, ParentType extends Reso
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   isHidden?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProductGroupModelResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductGroupModel'] = ResolversParentTypes['ProductGroupModel']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'ProductGroup', ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  categoryId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  isHidden?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
 export type ProductModelResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProductModel'] = ResolversParentTypes['ProductModel']> = ResolversObject<{
@@ -804,8 +837,10 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   exchangeRate?: Resolver<ResolversTypes['ExchangeRate'], ParentType, ContextType, RequireFields<QueryExchangeRateArgs, 'name'>>;
   hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<QueryProductArgs, 'productId'>>;
   productGroups?: Resolver<Array<ResolversTypes['ProductGroup']>, ParentType, ContextType, Partial<QueryProductGroupsArgs>>;
   products?: Resolver<ResolversTypes['PaginatedProducts'], ParentType, ContextType, Partial<QueryProductsArgs>>;
+  productsInProductGroup?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryProductsInProductGroupArgs, 'productId'>>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'UserInput'>>;
 }>;
 
@@ -864,6 +899,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   PaymentMethod?: PaymentMethodResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductGroup?: ProductGroupResolvers<ContextType>;
+  ProductGroupModel?: ProductGroupModelResolvers<ContextType>;
   ProductModel?: ProductModelResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ShippingMethod?: ShippingMethodResolvers<ContextType>;

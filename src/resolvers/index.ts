@@ -17,6 +17,8 @@ import {
   categories,
   productGroups,
   products,
+  product,
+  productsInProductGroup,
   cart,
   exchangeRate,
 } from "./queries";
@@ -31,6 +33,8 @@ export const resolvers: Resolvers = {
     categories,
     productGroups,
     products,
+    product,
+    productsInProductGroup,
     cart,
     exchangeRate,
   },

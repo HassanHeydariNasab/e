@@ -13,6 +13,8 @@ type Query {
   products(filter: ProductsFilter, options: ProductsOptions): PaginatedProducts!
   cart: Order!
   exchangeRate(name: String!): ExchangeRate!
+  product(productId: ObjectId!): Product!
+  productsInProductGroup(productId: ObjectId!): [Product!]!
 }
 
 type Mutation {
@@ -182,12 +184,21 @@ type Category {
   isHidden: Boolean
 }
 
-type ProductGroup {
+interface ProductGroupModel {
   _id: ObjectId!
   name: String!
   categoryId: ObjectId!
   createdAt: Date
   isHidden: Boolean
+}
+
+type ProductGroup implements ProductGroupModel {
+  _id: ObjectId!
+  name: String!
+  categoryId: ObjectId!
+  createdAt: Date
+  isHidden: Boolean
+  products: [Product!]!
 }
 
 interface ProductModel {

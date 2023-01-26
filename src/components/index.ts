@@ -11,3 +11,4 @@ export * from "./AddProductCard";
 export * from "./CategoryCard";
 export * from "./AddCategoryCard";
 export * from "./AddToCart";
+export * from "./Price";

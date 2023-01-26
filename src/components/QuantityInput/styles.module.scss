@@ -23,6 +23,8 @@
     }
 
     & > svg {
+      color: c.$darker-primary;
+      cursor: pointer;
       @include v.transition([filter]);
       &:hover {
         filter: brightness(1.2);
