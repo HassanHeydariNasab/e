@@ -4,15 +4,19 @@
 .container {
   display: flex;
   gap: 1rem;
+  max-width: 320px;
+
   &__quantity-input {
     flex: 1;
   }
+
   &__add-to-cart {
     flex: 1;
   }
+
   &__remove-from-cart {
     border-radius: 100%;
-    padding: 18px;
+    padding: 1rem;
     @include v.transition([color border]);
     &:hover {
       color: c.$red;
