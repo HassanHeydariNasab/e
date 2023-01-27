@@ -17,14 +17,21 @@
   }
 
   &__item {
-    margin: 3rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-items: center;
+    margin-bottom: 1rem;
+    gap: 0.5rem;
 
     &__key {
-      margin: 0 1rem;
+      font-weight: 500;
+      color: c.$secondary;
+      margin: 0 0.5rem;
     }
 
     &__value {
-      margin-right: 0.5rem;
+      display: block;
       border: 1px solid c.$dark-primary;
       border-radius: 8px;
       padding: 1rem;
