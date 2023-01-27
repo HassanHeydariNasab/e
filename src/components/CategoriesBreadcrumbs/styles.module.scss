@@ -1,0 +1,20 @@
+@use "../../styles/colors.scss" as c;
+
+.container {
+  display: flex;
+  align-items: center;
+  font-size: medium;
+  font-weight: 700;
+
+  & a {
+    color: c.$dark-primary;
+    margin: 0 0.5rem;
+  }
+
+  & svg {
+    color: c.$dark-primary;
+    &:last-child {
+      display: none;
+    }
+  }
+}

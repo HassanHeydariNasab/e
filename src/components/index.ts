@@ -12,3 +12,4 @@ export * from "./CategoryCard";
 export * from "./AddCategoryCard";
 export * from "./AddToCart";
 export * from "./Price";
+export * from "./CategoriesBreadcrumbs";

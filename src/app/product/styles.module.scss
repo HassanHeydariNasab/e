@@ -43,12 +43,14 @@
 .product {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
 
   &__image {
     object-fit: contain;
     max-width: 100vw;
     border-radius: 32px;
+    border: 2px solid c.$primary;
   }
 
   &__image-thumbnails {
