@@ -1,7 +1,6 @@
 import { GraphQLError } from "graphql";
-import { ObjectId } from "mongodb";
 
-import { Permission } from "@types";
+import { Permission, ProductGroup } from "@types";
 import type { MutationResolvers } from "@types";
 import { ProductGroupsCollection } from "@models";
 
@@ -27,7 +26,7 @@ export const createProductGroup: MutationResolvers["createProductGroup"] =
       name,
       categoryId,
       createdAt: new Date(),
-    });
+    } as ProductGroup);
     const productGroup = await ProductGroupsCollection.findOne({
       _id: insertedId,
     });

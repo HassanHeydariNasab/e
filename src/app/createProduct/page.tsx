@@ -99,7 +99,11 @@ function CreateProductPage() {
         </form>
         <form onChange={handleSubmitImages(onSubmitImages)}>
           {images.map((image, index) => (
-            <img src={image.preview} key={image.preview} />
+            <img
+              src={image.preview}
+              key={image.preview}
+              alt={`image ${index + 1}`}
+            />
           ))}
           <FileInput
             {...registerImages("file")}

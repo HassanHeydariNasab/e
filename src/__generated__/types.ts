@@ -275,6 +275,7 @@ export type Product = ProductModel & {
   categoryId: Scalars['ObjectId'];
   createdAt?: Maybe<Scalars['Date']>;
   defaultImageId: Scalars['ObjectId'];
+  description: Scalars['String'];
   imageIds: Array<Scalars['ObjectId']>;
   isHidden?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
@@ -323,6 +324,7 @@ export type ProductModel = {
   categoryId: Scalars['ObjectId'];
   createdAt?: Maybe<Scalars['Date']>;
   defaultImageId: Scalars['ObjectId'];
+  description: Scalars['String'];
   imageIds: Array<Scalars['ObjectId']>;
   isHidden?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
@@ -788,6 +790,7 @@ export type ProductResolvers<ContextType = Context, ParentType extends Resolvers
   categoryId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   defaultImageId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   imageIds?: Resolver<Array<ResolversTypes['ObjectId']>, ParentType, ContextType>;
   isHidden?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -823,6 +826,7 @@ export type ProductModelResolvers<ContextType = Context, ParentType extends Reso
   categoryId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   defaultImageId?: Resolver<ResolversTypes['ObjectId'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   imageIds?: Resolver<Array<ResolversTypes['ObjectId']>, ParentType, ContextType>;
   isHidden?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

@@ -3,7 +3,7 @@ import type { DetailedHTMLProps, FC, InputHTMLAttributes } from "react";
 import type { UseFormRegister } from "react-hook-form";
 import clsx from "clsx";
 
-import type { Pagination } from "@types";
+import type { Pagination as PaginationType } from "@types";
 
 import styles from "./styles.module.scss";
 
@@ -13,7 +13,7 @@ interface Props
     HTMLInputElement
   > {
   name: string;
-  pagination: Pagination;
+  pagination: PaginationType;
   containerClassName?: string;
   register: UseFormRegister<any>;
 }

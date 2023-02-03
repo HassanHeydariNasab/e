@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql";
 
-import { Permission } from "@types";
+import { Permission, Product } from "@types";
 import type { MutationResolvers } from "@types";
 import { ProductsCollection } from "@models";
 
@@ -46,6 +46,7 @@ export const createProduct: MutationResolvers["createProduct"] = async (
     price,
     productGroupId,
     quantity,
+    description: "some description",
   });
   const product = await ProductsCollection.findOne({
     _id: insertedId,

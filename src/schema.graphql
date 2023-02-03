@@ -207,6 +207,7 @@ interface ProductModel {
   categoryId: ObjectId!
   createdAt: Date
   defaultImageId: ObjectId!
+  description: String!
   imageIds: [ObjectId!]!
   isHidden: Boolean
   name: String!
@@ -221,6 +222,7 @@ type Product implements ProductModel {
   categoryId: ObjectId!
   createdAt: Date
   defaultImageId: ObjectId!
+  description: String!
   imageIds: [ObjectId!]!
   isHidden: Boolean
   name: String!
